@@ -1,0 +1,18 @@
+## EOS Online Subsystem C++ Example for Unreal Engine 4.25
+
+This is the C++ example project for Unreal Engine 4.25. It demonstrates how to use [the EOS Online Subsystem plugin](https://redpointgames.gitlab.io/eos-online-subsystem/) in your Unreal Engine project.
+
+### Getting started
+
+To use this example project, you'll need to install the EOS Online Subsystem plugin. You can do this in a number of ways:
+
+- Install the Marketplace Edition through the Epic Games Launcher. This will install the plugin system-wide, so you don't need to add files to the example project to get it working.
+- Install the Marketplace Edition from the source code repository, and add it underneath the `Plugins/` folder (as outlined [in the documentation](https://redpointgames.gitlab.io/eos-online-subsystem/docs/#installing-the-plugin)).
+
+**Note:** The Free Edition no longer supports Unreal Engine 4.25.
+
+### Configure EOS
+
+You will need to configure the EOS plugin with your own organisation, sandbox, product and client IDs, as outlined in [the documentation](https://redpointgames.gitlab.io/eos-online-subsystem/docs/core_configuration).
+
+Once you've replaced the existing values with your own, you should be able to run the example project in the editor.
