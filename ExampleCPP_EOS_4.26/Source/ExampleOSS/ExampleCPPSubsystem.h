@@ -336,10 +336,10 @@ private:
     void RegisterExistingPlayers(const UObject *WorldContextObject);
 
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void RegisterPlayer(APlayerController *InPlayerController);
+    FUniqueNetIdRepl RegisterPlayer(APlayerController *InPlayerController);
 
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void UnregisterPlayer(APlayerController *InPlayerController);
+    void UnregisterPlayer(APlayerController *InPlayerController, FUniqueNetIdRepl UniqueNetIdRepl);
 
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     void StartDestroySession(
@@ -646,4 +646,8 @@ private:
     void HandleQueryPresenceComplete(const class FUniqueNetId &UserId, const bool bWasSuccessful);
 
     void OnPresenceReceived(const class FUniqueNetId &UserId, const TSharedRef<FOnlineUserPresence> &Presence);
+
+public:
+    UFUNCTION(BlueprintCallable)
+    void BeginRecordingReplay(AGameModeBase *GameMode);
 };

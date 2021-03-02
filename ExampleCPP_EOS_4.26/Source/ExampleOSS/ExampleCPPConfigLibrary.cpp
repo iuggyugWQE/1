@@ -124,7 +124,7 @@ bool UExampleCPPConfigLibrary::GetAreBeaconsSupported(const UObject *WorldContex
     }
     else
     {
-        return ApiVersion == TEXT("v2020_12_09") || ApiVersion == TEXT("v2020_12_02") ||
-               ApiVersion == TEXT("v2020_12_01");
+        return !(ApiVersion == TEXT("v2020_12_09") || ApiVersion == TEXT("v2020_12_02") ||
+               ApiVersion == TEXT("v2020_12_01"));
     }
 }

@@ -662,9 +662,14 @@ void UExampleCPPSubsystem::RegisterExistingPlayers(const UObject *WorldContextOb
     }
 }
 
-void UExampleCPPSubsystem::RegisterPlayer(APlayerController *InPlayerController)
+FUniqueNetIdRepl UExampleCPPSubsystem::RegisterPlayer(APlayerController *InPlayerController)
 {
     check(IsValid(InPlayerController));
+
+    if (InPlayerController->GetNetDriverName().IsEqual(NAME_DemoNetDriver))
+    {
+        return FUniqueNetIdRepl();
+    }
 
     FUniqueNetIdRepl UniqueNetIdRepl;
     if (InPlayerController->IsLocalPlayerController())
@@ -692,7 +697,7 @@ void UExampleCPPSubsystem::RegisterPlayer(APlayerController *InPlayerController)
     if (!UniqueNetId.IsValid())
     {
         UE_LOG(LogTemp, Error, TEXT("No unique net ID assocated with connection, can not register player"));
-        return;
+        return FUniqueNetIdRepl();
     }
 
     IOnlineSubsystem *Subsystem = Online::GetSubsystem(InPlayerController->GetWorld());
@@ -701,33 +706,12 @@ void UExampleCPPSubsystem::RegisterPlayer(APlayerController *InPlayerController)
     check(Session != nullptr);
 
     verify(Session->RegisterPlayer(FName(TEXT("MyLocalSessionName")), *UniqueNetId, false));
+    return UniqueNetIdRepl;
 }
 
-void UExampleCPPSubsystem::UnregisterPlayer(APlayerController *InPlayerController)
+void UExampleCPPSubsystem::UnregisterPlayer(APlayerController *InPlayerController, FUniqueNetIdRepl UniqueNetIdRepl)
 {
     check(IsValid(InPlayerController));
-
-    FUniqueNetIdRepl UniqueNetIdRepl;
-    if (InPlayerController->IsLocalPlayerController())
-    {
-        ULocalPlayer *LocalPlayer = InPlayerController->GetLocalPlayer();
-        if (IsValid(LocalPlayer))
-        {
-            UniqueNetIdRepl = LocalPlayer->GetPreferredUniqueNetId();
-        }
-        else
-        {
-            UNetConnection *RemoteNetConnection = Cast<UNetConnection>(InPlayerController->Player);
-            check(IsValid(RemoteNetConnection));
-            UniqueNetIdRepl = RemoteNetConnection->PlayerId;
-        }
-    }
-    else
-    {
-        UNetConnection *RemoteNetConnection = Cast<UNetConnection>(InPlayerController->Player);
-        check(IsValid(RemoteNetConnection));
-        UniqueNetIdRepl = RemoteNetConnection->PlayerId;
-    }
 
     TSharedPtr<const FUniqueNetId> UniqueNetId = UniqueNetIdRepl.GetUniqueNetId();
     if (!UniqueNetId.IsValid())
@@ -874,6 +858,12 @@ void UExampleCPPSubsystem::SendBeaconPingToSearchResult(
     if (!UExampleCPPConfigLibrary::GetAreBeaconsSupported(WorldContextObject))
     {
         OnDone.ExecuteIfBound(false, TEXT("Beacons are not supported on the legacy networking stack"));
+        return;
+    }
+
+    if (!IsValid(SearchResult))
+    {
+        OnDone.ExecuteIfBound(false, TEXT("Search result is not valid"));
         return;
     }
 
@@ -1970,4 +1960,15 @@ void UExampleCPPSubsystem::OnPresenceReceived(
     const TSharedRef<FOnlineUserPresence> &Presence)
 {
     PresenceUpdated.Broadcast(FUniqueNetIdRepl(UserId).ToString(), Presence->Status.ToDebugString());
+}
+
+void UExampleCPPSubsystem::BeginRecordingReplay(AGameModeBase *GameMode)
+{
+    const ENetMode NetMode = GameMode->GetWorld()->GetNetMode();
+    const bool bIsServer = (NetMode == ENetMode::NM_DedicatedServer || NetMode == ENetMode::NM_ListenServer);
+    if (GameMode->GetWorld()->IsGameWorld() && bIsServer)
+    {
+        // start our recording
+        GameMode->GetGameInstance()->StartRecordingReplay(FString("Replay"), FString("Replay"));
+    }
 }
