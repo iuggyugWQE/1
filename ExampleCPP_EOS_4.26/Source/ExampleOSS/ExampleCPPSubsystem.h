@@ -21,7 +21,8 @@
  * This demo project exposes some blueprint nodes so they're accessible from UMG. It's not meant to be an example of how
  * you can access the online subsystem from blueprints.
  *
- * If you're interested in using the online subsystem from blueprints, see the "DemoBlueprint" project instead.
+ * If you're interested in using the online subsystem from blueprints, see the "ExampleBlueprints_EOS_..." project
+ * instead.
  */
 
 UCLASS(BlueprintType)
@@ -37,6 +38,9 @@ public:
 
     UPROPERTY(BlueprintReadOnly)
     FString ConnectionString;
+
+    UPROPERTY(BlueprintReadonly)
+    bool bIsDedicatedServer;
 };
 
 UCLASS(BlueprintType)
@@ -304,7 +308,12 @@ private:
 
 public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void StartCreateSession(const UObject *WorldContextObject, FExampleCPPSubsystemCreateSessionComplete OnDone);
+    void StartCreateSession(
+        const UObject *WorldContextObject,
+        bool bOverridePorts,
+        int32 InGamePort,
+        int32 InBeaconPort,
+        FExampleCPPSubsystemCreateSessionComplete OnDone);
 
 private:
     FDelegateHandle CreateSessionDelegateHandle;

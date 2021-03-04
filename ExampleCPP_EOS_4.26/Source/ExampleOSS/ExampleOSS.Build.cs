@@ -8,6 +8,6 @@ public class ExampleOSS : ModuleRules
 
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "OnlineSubsystemUtils", "DeveloperSettings" });
 
-        PrivateDependencyModuleNames.AddRange(new string[] { "OnlineSubsystem", "ExampleOSSEarlyConfig" });
+        PrivateDependencyModuleNames.AddRange(new string[] { "OnlineSubsystem", "ExampleOSSEarlyConfig", "Http", "Json" });
     }
 }

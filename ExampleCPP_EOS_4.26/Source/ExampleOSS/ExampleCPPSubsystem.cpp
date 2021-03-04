@@ -461,6 +461,9 @@ void UExampleCPPSubsystem::HandleLogoutComplete(
 
 void UExampleCPPSubsystem::StartCreateSession(
     const UObject *WorldContextObject,
+    bool bOverridePorts,
+    int32 InGamePort,
+    int32 InBeaconPort,
     FExampleCPPSubsystemCreateSessionComplete OnDone)
 {
     IOnlineSubsystem *Subsystem = Online::GetSubsystem(WorldContextObject->GetWorld());
@@ -486,6 +489,27 @@ void UExampleCPPSubsystem::StartCreateSession(
     SessionSettings->Settings.Add(
         FName(TEXT("SessionSetting")),
         FOnlineSessionSetting(FString(TEXT("SettingValue")), EOnlineDataAdvertisementType::ViaOnlineService));
+    bool IsDedicated =
+        FPlatformMisc::GetEnvironmentVariable(TEXT("IS_REDPOINT_DEDICATED_SERVER")) == FString(TEXT("true"));
+    SessionSettings->Settings.Add(
+        FName(TEXT("IsDedicatedServer")),
+        FOnlineSessionSetting(IsDedicated, EOnlineDataAdvertisementType::ViaOnlineService));
+    if (bOverridePorts)
+    {
+        // Override address bound so client will connect to the map on the actual port.
+        SessionSettings->Settings.Add(
+            FName(TEXT("__EOS_OverrideAddressBound")),
+            FOnlineSessionSetting(
+                FString::Printf(TEXT("0.0.0.0:%d"), InGamePort),
+                EOnlineDataAdvertisementType::ViaOnlineService));
+
+        // This is a custom setting that we handle manually in our beacon code in the example.
+        SessionSettings->Settings.Add(
+            FName(TEXT("OverrideBeaconPort")),
+            FOnlineSessionSetting(
+                FString::Printf(TEXT("%d"), InBeaconPort),
+                EOnlineDataAdvertisementType::ViaOnlineService));
+    }
 
     this->CreateSessionDelegateHandle =
         Session->AddOnCreateSessionCompleteDelegate_Handle(FOnCreateSessionComplete::FDelegate::CreateUObject(
@@ -544,6 +568,7 @@ void UExampleCPPSubsystem::StartFindSessions(
 
     TSharedRef<FOnlineSessionSearch> Search = MakeShared<FOnlineSessionSearch>();
     // Remove the default search parameters that FOnlineSessionSearch sets up.
+    Search->MaxSearchResults = 100;
     Search->QuerySettings.SearchParams.Empty();
     Search->QuerySettings.Set(
         FName(TEXT("SessionSetting")),
@@ -584,6 +609,15 @@ void UExampleCPPSubsystem::HandleFindSessionsComplete(
                 auto Result = NewObject<UExampleCPPSessionSearchResult>(this);
                 Result->Result = RawResult;
                 Result->SessionId = RawResult.GetSessionIdStr();
+                auto DedicatedServerAttr = RawResult.Session.SessionSettings.Settings.Find("IsDedicatedServer");
+                if (DedicatedServerAttr != nullptr)
+                {
+                    DedicatedServerAttr->Data.GetValue(Result->bIsDedicatedServer);
+                }
+                else
+                {
+                    Result->bIsDedicatedServer = false;
+                }
                 Session->GetResolvedConnectString(RawResult, NAME_GamePort, Result->ConnectionString);
                 Results.Add(Result);
             }
@@ -875,9 +909,17 @@ void UExampleCPPSubsystem::SendBeaconPingToSearchResult(
     }
     IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
 
-    FString ConnectInfo;
     // The port name is set to FName(TEXT("12345")) as per the comment in DemoBeacon.cpp.
-    if (!Session->GetResolvedConnectString(SearchResult->Result, FName(TEXT("12345")), ConnectInfo))
+    // Allow dedicated servers to specify an override for the beacon port as needed.
+    FString BeaconPort = TEXT("12345");
+    FString OverrideBeaconPort;
+    if (SearchResult->Result.Session.SessionSettings.Get("OverrideBeaconPort", OverrideBeaconPort))
+    {
+        BeaconPort = OverrideBeaconPort;
+    }
+
+    FString ConnectInfo;
+    if (!Session->GetResolvedConnectString(SearchResult->Result, FName(*BeaconPort), ConnectInfo))
     {
         OnDone.ExecuteIfBound(false, TEXT("Connect info not found"));
         return;
