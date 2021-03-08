@@ -1,6 +1,21 @@
 {
 	"FileVersion": 3,
 	"EngineAssociation": "4.26",
+	"Modules": [
+		{
+			"Name": "ExampleOSSEarlyConfig",
+			"Type": "Runtime",
+			"LoadingPhase": "PostConfigInit"
+		},
+		{
+			"Name": "ExampleOSS",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	],
 	"Plugins": [
 		{
 			"Name": "OnlineSubsystemEOS",
