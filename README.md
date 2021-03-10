@@ -9,6 +9,8 @@ Click through to the README for the particular example you are interested in.
 - [Blueprints Example for Unreal Engine 4.26](./ExampleBlueprints_EOS_4.26/README.md) (requires Online Subsystem Blueprints)
 - [C++ Example for Unreal Engine 4.26](./ExampleCPP_EOS_4.26/README.md)
 
+If you would like to deploy the C++ example as a dedicated server running on Kubernetes, refer to [the Agones example documentation](./AgonesResources/).
+
 ### Legacy examples
 
 The following example projects are no longer maintained. Unless you have a specific reason to use the projects below, it's recommended you use one of the maintained examples above. Legacy examples have less features.
