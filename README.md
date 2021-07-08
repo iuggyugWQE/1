@@ -11,11 +11,7 @@ Click through to the README for the particular example you are interested in.
 
 If you would like to deploy the C++ example as a dedicated server running on Kubernetes, refer to [the Agones example documentation](./AgonesResources/).
 
-### Legacy examples
-
-The following example projects are no longer maintained. Unless you have a specific reason to use the projects below, it's recommended you use one of the maintained examples above. Legacy examples have less features.
-
-- [Legacy C++ Example for Unreal Engine 4.25](./ExampleCPP_EOS_4.25_Legacy/README.md)
+These examples should also work on Unreal Engine 4.27 and Unreal Engine 5.0.
 
 ### Further documentation
 

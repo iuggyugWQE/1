@@ -2,10 +2,15 @@
 
 #include "AgonesSubsystem.h"
 
+#include "Containers/Ticker.h"
 #include "CoreMinimal.h"
+#include "Dom/JsonObject.h"
+#include "Dom/JsonValue.h"
 #include "HAL/PlatformMisc.h"
 #include "HttpModule.h"
 #include "Interfaces/IHttpResponse.h"
+#include "Serialization/JsonReader.h"
+#include "Serialization/JsonSerializer.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogAgones, All, All);
 DEFINE_LOG_CATEGORY(LogAgones);
@@ -201,7 +206,7 @@ void UAgonesSubsystem::HandleGameServer(
 
     int32 OutGamePort = 0;
     int32 OutBeaconPort = 0;
-    auto PortsArray = JsonObject->GetObjectField("status")->GetArrayField("ports");
+    const TArray<TSharedPtr<FJsonValue>> &PortsArray = JsonObject->GetObjectField("status")->GetArrayField("ports");
     for (auto PortValue : PortsArray)
     {
         auto PortObject = PortValue->AsObject();

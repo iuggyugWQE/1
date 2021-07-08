@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine/DeveloperSettings.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
 
@@ -30,30 +31,6 @@ class EXAMPLEOSS_API UExampleCPPConfigLibrary : public UBlueprintFunctionLibrary
 public:
     UFUNCTION(BlueprintCallable)
     static bool GetPreferBlueprintsImplementation();
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    static FString GetAuthMode(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    static void SetAuthMode(const UObject *WorldContextObject, FString AuthMode);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    static bool GetPersistentLoginEnabled(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    static void SetPersistentLoginEnabled(const UObject *WorldContextObject, bool EnablePersistentLogin);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    static bool GetDeviceIdEnabled(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    static void SetDeviceIdEnabled(const UObject *WorldContextObject, bool EnableDeviceIds);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    static bool GetDeleteDeviceIdEnabled(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    static void SetDeleteDeviceIdEnabled(const UObject *WorldContextObject, bool EnableDeleteDeviceId);
 
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     static bool GetIsSteamEnabled(const UObject *WorldContextObject);

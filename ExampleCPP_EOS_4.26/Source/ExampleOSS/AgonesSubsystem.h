@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "HttpModule.h"
+#include "Subsystems/GameInstanceSubsystem.h"
 
 #include "AgonesSubsystem.generated.h"
 

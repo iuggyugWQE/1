@@ -4,7 +4,7 @@
 
 #include "Containers/Set.h"
 #include "CoreMinimal.h"
-#include "ExampleCPPBeacon.h"
+#include "GameFramework/OnlineReplStructs.h"
 #include "Interfaces/OnlineIdentityInterface.h"
 #include "Interfaces/OnlineLeaderboardInterface.h"
 #include "Interfaces/OnlinePartyInterface.h"
@@ -14,6 +14,22 @@
 #include "Interfaces/OnlineUserInterface.h"
 #include "OnlineSessionSettings.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+
+#include "Achievements/AchievementsTypes.h"
+#include "Auth/AuthTypes.h"
+#include "Avatar/AvatarTypes.h"
+#include "ExampleCPPBeacon.h"
+#include "Friends/FriendsTypes.h"
+#include "Leaderboards/LeaderboardsTypes.h"
+#include "Lobbies/LobbiesTypes.h"
+#include "Multiplayer/MultiplayerTypes.h"
+#include "Parties/PartiesTypes.h"
+#include "Presence/PresenceTypes.h"
+#include "Session/SessionTypes.h"
+#include "Stats/StatsTypes.h"
+#include "TitleFile/TitleFileTypes.h"
+#include "UserCloud/UserCloudTypes.h"
+#include "UserInfo/UserInfoTypes.h"
 
 #include "ExampleCPPSubsystem.generated.h"
 
@@ -25,179 +41,20 @@
  * instead.
  */
 
-UCLASS(BlueprintType)
-class EXAMPLEOSS_API UExampleCPPSessionSearchResult : public UObject
-{
-    GENERATED_BODY()
-
-public:
-    FOnlineSessionSearchResult Result;
-
-    UPROPERTY(BlueprintReadOnly)
-    FString SessionId;
-
-    UPROPERTY(BlueprintReadOnly)
-    FString ConnectionString;
-
-    UPROPERTY(BlueprintReadonly)
-    bool bIsDedicatedServer;
-};
-
-UCLASS(BlueprintType)
-class EXAMPLEOSS_API UExampleCPPPartyId : public UObject
-{
-    GENERATED_BODY()
-
-public:
-    TSharedPtr<const FOnlinePartyId> PartyId;
-
-    UFUNCTION(BlueprintCallable)
-    FString ToString()
-    {
-        if (PartyId == nullptr)
-        {
-            return TEXT("");
-        }
-
-        return PartyId->ToString();
-    }
-};
-
-UCLASS(BlueprintType)
-class EXAMPLEOSS_API UExampleCPPPartyMemberId : public UObject
-{
-    GENERATED_BODY()
-
-public:
-    FOnlinePartyMemberConstPtr PartyMember;
-
-    UFUNCTION(BlueprintCallable)
-    FString ToString()
-    {
-        if (PartyMember == nullptr)
-        {
-            return TEXT("");
-        }
-
-        return PartyMember->GetUserId()->ToString();
-    }
-};
-
-UCLASS(BlueprintType)
-class EXAMPLEOSS_API UExampleCPPPartyInvite : public UObject
-{
-    GENERATED_BODY()
-
-public:
-    IOnlinePartyJoinInfoConstPtr PartyInvite;
-
-    UFUNCTION(BlueprintCallable)
-    FString ToString()
-    {
-        if (PartyInvite == nullptr)
-        {
-            return TEXT("");
-        }
-
-        return PartyInvite->GetPartyId()->ToString();
-    }
-};
-
-UCLASS(BlueprintType)
-class EXAMPLEOSS_API UExampleCPPFriend : public UObject
-{
-    GENERATED_BODY()
-
-public:
-    TSharedPtr<FOnlineFriend> Friend;
-
-    UFUNCTION(BlueprintCallable)
-    FString ToString()
-    {
-        if (Friend == nullptr)
-        {
-            return TEXT("");
-        }
-
-        return Friend->GetDisplayName();
-    }
-};
-
-USTRUCT(BlueprintType)
-struct EXAMPLEOSS_API FExampleCPPStat
-{
-    GENERATED_BODY()
-
-public:
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    FString Id;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    int CurrentValue;
-};
-
-USTRUCT(BlueprintType)
-struct EXAMPLEOSS_API FExampleCPPAchievement
-{
-    GENERATED_BODY()
-
-public:
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    FString Id;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    FText DisplayName;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    FText Description;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    bool bUnlocked;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    float Progress;
-};
-
-USTRUCT(BlueprintType)
-struct EXAMPLEOSS_API FExampleCPPLeaderboardEntry
-{
-    GENERATED_BODY()
-
-public:
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    int Rank;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    FString PlayerId;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    FString PlayerNickname;
-
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    int Score;
-};
-
-DECLARE_DYNAMIC_DELEGATE_TwoParams(FExampleCPPSubsystemLoginComplete, bool, WasSuccessful, FString, ErrorMessage);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemLogoutComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(FExampleCPPSubsystemLoginComplete, bool, WasSuccessful, FString, ErrorMessage);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(
-    FExampleCPPSubsystemFindSessionsComplete,
+    FExampleCPPSubsystemQueryAchievementsComplete,
     bool,
-    WasSuccessful,
-    const TArray<UExampleCPPSessionSearchResult *> &,
-    Results);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemCreateSessionComplete, bool, WasSuccessful);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemDestroySessionComplete, bool, WasSuccessful);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemJoinSessionComplete, bool, WasSuccessful);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemUpdatePresenceComplete, bool, WasSuccessful);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemCreatePartyComplete, bool, WasSuccessful);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemJoinPartyComplete, bool, WasSuccessful);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemLeavePartyComplete, bool, WasSuccessful);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemKickMemberComplete, bool, WasSuccessful);
+    bWasSuccessful,
+    const TArray<FExampleCPPAchievement> &,
+    Achievements);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemReadFriendsComplete, bool, WasSuccessful);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemInviteFriendComplete, bool, WasSuccessful);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FExampleCPPSubsystemInvitationsChanged);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExampleCPPSubsystemPartyLeaderWasFollowedToSession, FName, SessionName);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExampleCPPSubsystemSessionJoinedMapTravelRequired, FName, SessionName);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemUpdatePresenceComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemQueryPresenceComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FExampleCPPSubsystemPresenceUpdated, FString, UserId, FString, Status);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemQueryUserInfoComplete, FString, Result);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemQueryUserIdMappingComplete, FString, Result);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemQueryExternalIdMappingsComplete, FString, Result);
@@ -209,60 +66,56 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(
     QueriedStats);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemIngestStatComplete, bool, bWasSuccessful);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(
-    FExampleCPPSubsystemQueryAchievementsComplete,
+    FExampleCPPSubsystemFindSessionsComplete,
     bool,
-    bWasSuccessful,
-    const TArray<FExampleCPPAchievement> &,
-    Achievements);
+    WasSuccessful,
+    const TArray<UExampleCPPSessionSearchResult *> &,
+    Results);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemCreateSessionComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemDestroySessionComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemJoinSessionComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExampleCPPSubsystemPartyLeaderWasFollowedToSession, FName, SessionName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExampleCPPSubsystemSessionJoinedMapTravelRequired, FName, SessionName);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemCreatePartyComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemJoinPartyComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemLeavePartyComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemKickMemberComplete, bool, WasSuccessful);
 DECLARE_DYNAMIC_DELEGATE_TwoParams(
     FExampleCPPSubsystemQueryLeaderboardsComplete,
     bool,
     bWasSuccessful,
     const TArray<FExampleCPPLeaderboardEntry> &,
     LeaderboardEntries);
-DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemQueryPresenceComplete, bool, WasSuccessful);
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(FExampleCPPSubsystemPresenceUpdated, FString, UserId, FString, Status);
 
 UCLASS(BlueprintType)
 class EXAMPLEOSS_API UExampleCPPSubsystem : public UGameInstanceSubsystem
 {
     GENERATED_BODY()
 
-    TSet<FString> SessionFollowConsumedIds;
-
 public:
     virtual void PostInitProperties() override;
 
-    void OnPartyDataReceived(
-        const FUniqueNetId &LocalUserId,
-        const FOnlinePartyId &PartyId,
-        const FName &Namespace,
-        const FOnlinePartyData &PartyData);
-    void OnFindSessionForLeaderFollow(
-        int32 LocalUserNum,
-        bool bWasSuccessful,
-        const FOnlineSessionSearchResult &SearchResult,
-        FString SessionFollowString);
-    FName JoinSessionForLeaderSessionName;
-    FDelegateHandle JoinSessionForLeaderFollowDelegateHandle;
-    void OnJoinSessionForLeaderFollow(FName SessionName, EOnJoinSessionCompleteResult::Type JoinResult);
+    /********** ExampleCPPSubsystem.Achievements.cpp **********/
 
-    void OnSessionUserInviteAccepted(
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void QueryAchievements(const UObject *WorldContextObject, FExampleCPPSubsystemQueryAchievementsComplete OnDone);
+
+private:
+    void HandleQueryAchievementDescriptions(
+        const FUniqueNetId &UserId,
         const bool bWasSuccessful,
-        const int32 LocalUserNum,
-        TSharedPtr<const FUniqueNetId> UserId,
-        const FOnlineSessionSearchResult &InviteResult);
-    void OnSessionJoinedViaOverlay(FName SessionName, EOnJoinSessionCompleteResult::Type JoinResult);
-    FName JoinSessionForInviteSessionName;
-    FDelegateHandle JoinSessionForInviteDelegateHandle;
-    void OnJoinSessionForInviteFollow(FName SessionName, EOnJoinSessionCompleteResult::Type JoinResult);
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemQueryAchievementsComplete OnDone);
+    void HandleQueryAchievements(
+        const FUniqueNetId &UserId,
+        const bool bWasSuccessful,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemQueryAchievementsComplete OnDone);
 
-    UPROPERTY(BlueprintAssignable)
-    FExampleCPPSubsystemPartyLeaderWasFollowedToSession PartyLeaderWasFollowedToSession;
+    /********** ExampleCPPSubsystem.Auth.cpp **********/
 
-    UPROPERTY(BlueprintAssignable)
-    FExampleCPPSubsystemSessionJoinedMapTravelRequired SessionJoinedMapTravelRequired;
-
+public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     bool IsSignedIn(const UObject *WorldContextObject);
 
@@ -277,6 +130,9 @@ public:
 
     UFUNCTION(BlueprintPure, meta = (WorldContext = "WorldContextObject"))
     FString GetLoggedInAuthAttribute(const UObject *WorldContextObject, const FString &InAuthAttrName);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    FUniqueNetIdRepl GetLoggedInUserId(const UObject *WorldContextObject);
 
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     void StartLogin(const UObject *WorldContextObject, int32 LocalUserNum, FExampleCPPSubsystemLoginComplete OnDone);
@@ -306,105 +162,81 @@ private:
         const UObject *WorldContextObject,
         FExampleCPPSubsystemLogoutComplete OnDone);
 
+    /********** ExampleCPPSubsystem.Avatar.cpp **********/
+
+    /********** ExampleCPPSubsystem.Friends.cpp **********/
+
 public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void StartCreateSession(
-        const UObject *WorldContextObject,
-        bool bOverridePorts,
-        int32 InGamePort,
-        int32 InBeaconPort,
-        FExampleCPPSubsystemCreateSessionComplete OnDone);
+    TArray<UExampleCPPFriend *> GetFriends(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartReadFriends(const UObject *WorldContextObject, FExampleCPPSubsystemReadFriendsComplete OnDone);
 
 private:
-    FDelegateHandle CreateSessionDelegateHandle;
-    void HandleCreateSessionComplete(
-        FName SessionName,
+    void HandleReadFriendsComplete(
+        int32 LocalUserNum,
         bool bWasSuccessful,
+        const FString &ListName,
+        const FString &ErrorStr,
         const UObject *WorldContextObject,
-        FExampleCPPSubsystemCreateSessionComplete OnDone);
+        FExampleCPPSubsystemReadFriendsComplete OnDone);
+
+    /********** ExampleCPPSubsystem.Leaderboards.cpp **********/
 
 public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void StartFindSessions(const UObject *WorldContextObject, FExampleCPPSubsystemFindSessionsComplete OnDone);
+    void QueryFriendsLeaderboards(
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemQueryLeaderboardsComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void QueryGlobalLeaderboards(
+        const UObject *WorldContextObject,
+        const FString &LeaderboardId,
+        FExampleCPPSubsystemQueryLeaderboardsComplete OnDone);
 
 private:
-    FDelegateHandle FindSessionsDelegateHandle;
-    void HandleFindSessionsComplete(
-        bool bWasSuccessful,
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemFindSessionsComplete OnDone,
-        TSharedRef<FOnlineSessionSearch> Search);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    FString GetCurrentSessionId(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    TArray<FString> GetPlayersInSession(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void RegisterExistingPlayers(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    FUniqueNetIdRepl RegisterPlayer(APlayerController *InPlayerController);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void UnregisterPlayer(APlayerController *InPlayerController, FUniqueNetIdRepl UniqueNetIdRepl);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void StartDestroySession(
-        const UObject *WorldContextObject,
-        FName SessionName,
-        FExampleCPPSubsystemDestroySessionComplete OnDone);
-
-private:
-    FDelegateHandle DestroySessionDelegateHandle;
-    void HandleDestroySessionComplete(
-        FName SessionName,
-        bool bWasSuccessful,
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemDestroySessionComplete OnDone);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void StartJoinSession(
-        const UObject *WorldContextObject,
-        UExampleCPPSessionSearchResult *SearchResult,
-        FExampleCPPSubsystemJoinSessionComplete OnDone);
-
-private:
-    FDelegateHandle JoinSessionDelegateHandle;
-    void HandleJoinSessionComplete(
-        FName SessionName,
-        EOnJoinSessionCompleteResult::Type JoinResult,
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemJoinSessionComplete OnDone);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void SendBeaconPingToSearchResult(
-        const UObject *WorldContextObject,
-        UExampleCPPSessionSearchResult *SearchResult,
-        FExampleCPPSubsystemBeaconPingComplete OnDone);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    FString GetResolvedConnectString(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    FString GetResolvedConnectStringForSession(const UObject *WorldContextObject, FName SessionName);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void StartUpdatePresence(
-        const UObject *WorldContextObject,
-        const FString &NewPresenceString,
-        FExampleCPPSubsystemUpdatePresenceComplete OnDone);
-
-private:
-    void HandleUpdatePresenceComplete(
-        const class FUniqueNetId &UserId,
+    FDelegateHandle QueryLeaderboardsDelegateHandle;
+    void HandleLeaderboardResult(
         const bool bWasSuccessful,
+        FOnlineLeaderboardReadRef LeaderboardRef,
         const UObject *WorldContextObject,
-        FExampleCPPSubsystemUpdatePresenceComplete OnDone);
+        FExampleCPPSubsystemQueryLeaderboardsComplete OnDone);
+
+    /********** ExampleCPPSubsystem.Lobbies.cpp **********/
+
+    /********** ExampleCPPSubsystem.Multiplayer.cpp **********/
+
+public:
+    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, meta = (WorldContext = "WorldContextObject"))
+    void SeamlessTravel(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, meta = (WorldContext = "WorldContextObject"))
+    void NonSeamlessTravel(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable)
+    void BeginRecordingReplay(AGameModeBase *GameMode);
+
+    /********** ExampleCPPSubsystem.Parties.cpp **********/
+
+private:
+    TSet<FString> SessionFollowConsumedIds;
+
+    void OnPartyDataReceived(
+        const FUniqueNetId &LocalUserId,
+        const FOnlinePartyId &PartyId,
+        const FName &Namespace,
+        const FOnlinePartyData &PartyData);
+
+    void OnPartyInvitesChanged(const FUniqueNetId &LocalUserId);
+
+public:
+    UPROPERTY(BlueprintAssignable)
+    FExampleCPPSubsystemInvitationsChanged OnInvitationsChanged;
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    TArray<UExampleCPPPartyInvite *> GetInvitations(const UObject *WorldContextObject);
 
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     TArray<UExampleCPPPartyId *> GetJoinedParties(const UObject *WorldContextObject);
@@ -412,7 +244,12 @@ private:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     void RequestPartyMembersFollowLeader(const UObject *WorldContextObject, FName SessionName);
 
-public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    TArray<UExampleCPPPartyMemberId *> GetPartyMembers(const UObject *WorldContextObject, UExampleCPPPartyId *PartyId);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    bool IsPartyLeader(const UObject *WorldContextObject, UExampleCPPPartyId *PartyId);
+
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     void StartCreateParty(
         const UObject *WorldContextObject,
@@ -426,23 +263,6 @@ private:
         const ECreatePartyCompletionResult Result,
         const UObject *WorldContextObject,
         FExampleCPPSubsystemCreatePartyComplete OnDone);
-
-public:
-    UPROPERTY(BlueprintAssignable)
-    FExampleCPPSubsystemInvitationsChanged OnInvitationsChanged;
-
-private:
-    void OnPartyInvitesChanged(const FUniqueNetId &LocalUserId);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    TArray<UExampleCPPPartyInvite *> GetInvitations(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    TArray<UExampleCPPPartyMemberId *> GetPartyMembers(const UObject *WorldContextObject, UExampleCPPPartyId *PartyId);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    bool IsPartyLeader(const UObject *WorldContextObject, UExampleCPPPartyId *PartyId);
 
 public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
@@ -494,22 +314,6 @@ private:
 
 public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    TArray<UExampleCPPFriend *> GetFriends(const UObject *WorldContextObject);
-
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void StartReadFriends(const UObject *WorldContextObject, FExampleCPPSubsystemReadFriendsComplete OnDone);
-
-private:
-    void HandleReadFriendsComplete(
-        int32 LocalUserNum,
-        bool bWasSuccessful,
-        const FString &ListName,
-        const FString &ErrorStr,
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemReadFriendsComplete OnDone);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     void StartInviteFriend(
         const UObject *WorldContextObject,
         UExampleCPPPartyId *PartyId,
@@ -524,6 +328,182 @@ private:
         const ESendPartyInvitationCompletionResult Result,
         const UObject *WorldContextObject,
         FExampleCPPSubsystemInviteFriendComplete OnDone);
+
+    /********** ExampleCPPSubsystem.Presence.cpp **********/
+
+private:
+    void OnPresenceReceived(const class FUniqueNetId &UserId, const TSharedRef<FOnlineUserPresence> &Presence);
+
+public:
+    UPROPERTY(BlueprintAssignable)
+    FExampleCPPSubsystemPresenceUpdated PresenceUpdated;
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartUpdatePresence(
+        const UObject *WorldContextObject,
+        const FString &NewPresenceString,
+        FExampleCPPSubsystemUpdatePresenceComplete OnDone);
+
+private:
+    void HandleUpdatePresenceComplete(
+        const class FUniqueNetId &UserId,
+        const bool bWasSuccessful,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemUpdatePresenceComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void QueryPresence(const UObject *WorldContextObject, FExampleCPPSubsystemQueryPresenceComplete OnDone);
+
+private:
+    void HandleQueryPresenceComplete(const class FUniqueNetId &UserId, const bool bWasSuccessful);
+
+    /********** ExampleCPPSubsystem.Session.cpp **********/
+
+private:
+    void OnFindSessionForLeaderFollow(
+        int32 LocalUserNum,
+        bool bWasSuccessful,
+        const FOnlineSessionSearchResult &SearchResult,
+        FString SessionFollowString);
+    FName JoinSessionForLeaderSessionName;
+    FDelegateHandle JoinSessionForLeaderFollowDelegateHandle;
+    void OnJoinSessionForLeaderFollow(FName SessionName, EOnJoinSessionCompleteResult::Type JoinResult);
+
+    void OnSessionUserInviteAccepted(
+        const bool bWasSuccessful,
+        const int32 LocalUserNum,
+        TSharedPtr<const FUniqueNetId> UserId,
+        const FOnlineSessionSearchResult &InviteResult);
+    void OnSessionJoinedViaOverlay(FName SessionName, EOnJoinSessionCompleteResult::Type JoinResult);
+    FName JoinSessionForInviteSessionName;
+    FDelegateHandle JoinSessionForInviteDelegateHandle;
+    void OnJoinSessionForInviteFollow(FName SessionName, EOnJoinSessionCompleteResult::Type JoinResult);
+
+public:
+    UPROPERTY(BlueprintAssignable)
+    FExampleCPPSubsystemPartyLeaderWasFollowedToSession PartyLeaderWasFollowedToSession;
+
+    UPROPERTY(BlueprintAssignable)
+    FExampleCPPSubsystemSessionJoinedMapTravelRequired SessionJoinedMapTravelRequired;
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    FString GetCurrentSessionId(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    TArray<FString> GetPlayersInSession(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void RegisterExistingPlayers(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    FUniqueNetIdRepl RegisterPlayer(APlayerController *InPlayerController);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void UnregisterPlayer(APlayerController *InPlayerController, FUniqueNetIdRepl UniqueNetIdRepl);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void SendBeaconPingToSearchResult(
+        const UObject *WorldContextObject,
+        UExampleCPPSessionSearchResult *SearchResult,
+        FExampleCPPSubsystemBeaconPingComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    FString GetResolvedConnectString(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    FString GetResolvedConnectStringForSession(const UObject *WorldContextObject, FName SessionName);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartCreateSession(
+        const UObject *WorldContextObject,
+        bool bOverridePorts,
+        int32 InGamePort,
+        int32 InBeaconPort,
+        FExampleCPPSubsystemCreateSessionComplete OnDone);
+
+private:
+    FDelegateHandle CreateSessionDelegateHandle;
+    void HandleCreateSessionComplete(
+        FName SessionName,
+        bool bWasSuccessful,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemCreateSessionComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartFindSessions(const UObject *WorldContextObject, FExampleCPPSubsystemFindSessionsComplete OnDone);
+
+private:
+    FDelegateHandle FindSessionsDelegateHandle;
+    void HandleFindSessionsComplete(
+        bool bWasSuccessful,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemFindSessionsComplete OnDone,
+        TSharedRef<FOnlineSessionSearch> Search);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartDestroySession(
+        const UObject *WorldContextObject,
+        FName SessionName,
+        FExampleCPPSubsystemDestroySessionComplete OnDone);
+
+private:
+    FDelegateHandle DestroySessionDelegateHandle;
+    void HandleDestroySessionComplete(
+        FName SessionName,
+        bool bWasSuccessful,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemDestroySessionComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartJoinSession(
+        const UObject *WorldContextObject,
+        UExampleCPPSessionSearchResult *SearchResult,
+        FExampleCPPSubsystemJoinSessionComplete OnDone);
+
+private:
+    FDelegateHandle JoinSessionDelegateHandle;
+    void HandleJoinSessionComplete(
+        FName SessionName,
+        EOnJoinSessionCompleteResult::Type JoinResult,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemJoinSessionComplete OnDone);
+
+    /********** ExampleCPPSubsystem.Stats.cpp **********/
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void QueryStats(const UObject *WorldContextObject, FExampleCPPSubsystemQueryStatsComplete OnDone);
+
+private:
+    void HandleQueryStats(
+        const FOnlineError &ResultState,
+        const TArray<TSharedRef<const FOnlineStatsUserStats>> &UsersStatsResult,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemQueryStatsComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void IngestStat(
+        const UObject *WorldContextObject,
+        FString StatName,
+        int32 IngestAmount,
+        FExampleCPPSubsystemIngestStatComplete OnDone);
+
+private:
+    void HandleIngestStat(
+        const FOnlineError &ResultState,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemIngestStatComplete OnDone);
+
+    /********** ExampleCPPSubsystem.TitleFile.cpp **********/
+
+    /********** ExampleCPPSubsystem.UserCloud.cpp **********/
+
+    /********** ExampleCPPSubsystem.UserInfo.cpp **********/
 
 public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
@@ -577,86 +557,4 @@ private:
         const FString &Error,
         const UObject *WorldContextObject,
         FExampleCPPSubsystemQueryExternalIdMappingsComplete OnDone);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void QueryStats(const UObject *WorldContextObject, FExampleCPPSubsystemQueryStatsComplete OnDone);
-
-private:
-    void HandleQueryStats(
-        const FOnlineError &ResultState,
-        const TArray<TSharedRef<const FOnlineStatsUserStats>> &UsersStatsResult,
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemQueryStatsComplete OnDone);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void IngestStat(
-        const UObject *WorldContextObject,
-        FString StatName,
-        int32 IngestAmount,
-        FExampleCPPSubsystemIngestStatComplete OnDone);
-
-private:
-    void HandleIngestStat(
-        const FOnlineError &ResultState,
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemIngestStatComplete OnDone);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void QueryAchievements(const UObject *WorldContextObject, FExampleCPPSubsystemQueryAchievementsComplete OnDone);
-
-private:
-    void HandleQueryAchievementDescriptions(
-        const FUniqueNetId &UserId,
-        const bool bWasSuccessful,
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemQueryAchievementsComplete OnDone);
-    void HandleQueryAchievements(
-        const FUniqueNetId &UserId,
-        const bool bWasSuccessful,
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemQueryAchievementsComplete OnDone);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void QueryFriendsLeaderboards(
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemQueryLeaderboardsComplete OnDone);
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void QueryGlobalLeaderboards(
-        const UObject *WorldContextObject,
-        const FString &LeaderboardId,
-        FExampleCPPSubsystemQueryLeaderboardsComplete OnDone);
-
-private:
-    FDelegateHandle QueryLeaderboardsDelegateHandle;
-    void HandleLeaderboardResult(
-        const bool bWasSuccessful,
-        FOnlineLeaderboardReadRef LeaderboardRef,
-        const UObject *WorldContextObject,
-        FExampleCPPSubsystemQueryLeaderboardsComplete OnDone);
-
-public:
-    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, meta = (WorldContext = "WorldContextObject"))
-    void SeamlessTravel(const UObject *WorldContextObject);
-    UFUNCTION(BlueprintCallable, BlueprintAuthorityOnly, meta = (WorldContext = "WorldContextObject"))
-    void NonSeamlessTravel(const UObject *WorldContextObject);
-
-public:
-    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    void QueryPresence(const UObject *WorldContextObject, FExampleCPPSubsystemQueryPresenceComplete OnDone);
-
-    UPROPERTY(BlueprintAssignable)
-    FExampleCPPSubsystemPresenceUpdated PresenceUpdated;
-
-private:
-    void HandleQueryPresenceComplete(const class FUniqueNetId &UserId, const bool bWasSuccessful);
-
-    void OnPresenceReceived(const class FUniqueNetId &UserId, const TSharedRef<FOnlineUserPresence> &Presence);
-
-public:
-    UFUNCTION(BlueprintCallable)
-    void BeginRecordingReplay(AGameModeBase *GameMode);
 };

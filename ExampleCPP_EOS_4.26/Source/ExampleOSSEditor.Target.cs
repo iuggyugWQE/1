@@ -7,6 +7,8 @@ public class ExampleOSSEditorTarget : TargetRules
     {
         Type = TargetType.Editor;
         DefaultBuildSettings = BuildSettingsVersion.V2;
-        ExtraModuleNames.AddRange(new string[] { "ExampleOSS", "ExampleOSSEarlyConfig" });
+        ExtraModuleNames.AddRange(new string[] { "ExampleOSS", "ExampleOSSDeveloper", "ExampleOSSEarlyConfig" });
+
+        ProjectDefinitions.Add("ONLINE_SUBSYSTEM_EOS_ENABLE_STEAM=1");
     }
 }
