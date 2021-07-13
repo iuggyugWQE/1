@@ -190,7 +190,7 @@ bool UExampleCPPSubsystem::CanLinkToEpicGamesAccount(const UObject *WorldContext
             if (Account.IsValid())
             {
                 FString OutVal;
-                if (Account->GetAuthAttribute(TEXT("CanLinkToEpicGamesAccount"), OutVal))
+                if (Account->GetAuthAttribute(TEXT("crossPlatform.canLink"), OutVal))
                 {
                     return OutVal == TEXT("true");
                 }
