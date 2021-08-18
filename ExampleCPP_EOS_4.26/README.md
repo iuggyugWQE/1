@@ -12,7 +12,7 @@ To use this example project, you'll need to install the EOS Online Subsystem plu
 
 ### Getting started
 
-This example project requires at least EOS Online Subsystem 2021.07.17. Please make sure you have the latest version installed through the Epic Games Launcher, or the example project won't work.
+This example project requires at least EOS Online Subsystem 2021.08.17. Please make sure you have the latest version installed through the Epic Games Launcher, or the example project won't work.
 
 ### Configure EOS
 
