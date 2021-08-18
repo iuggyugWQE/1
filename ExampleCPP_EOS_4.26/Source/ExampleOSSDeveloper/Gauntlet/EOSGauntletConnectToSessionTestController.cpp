@@ -24,6 +24,8 @@ void UEOSGauntletConnectToSessionTestController::OnLoginComplete(
         return;
     }
 
+    UE_LOG(LogEOSGauntlet, Verbose, TEXT("Successfully logged in, beginning search for session..."));
+
     this->StartSearch();
 }
 
@@ -103,6 +105,7 @@ void UEOSGauntletConnectToSessionTestController::HandleFindSessionsComplete(
     if (Search->SearchResults.Num() == 0)
     {
         // Search again...
+        UE_LOG(LogEOSGauntlet, Verbose, TEXT("Failed to find sessions, trying again..."));
         this->StartSearch();
         return;
     }

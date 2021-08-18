@@ -29,16 +29,22 @@ void UExampleCPPSubsystem::PostInitProperties()
         IOnlinePartyPtr Party = Subsystem->GetPartyInterface();
         IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
         IOnlinePresencePtr Presence = Subsystem->GetPresenceInterface();
-        Party->AddOnPartyInvitesChangedDelegate_Handle(
-            FOnPartyInvitesChangedDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnPartyInvitesChanged));
-        Party->AddOnPartyDataReceivedDelegate_Handle(
-            FOnPartyDataReceivedDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnPartyDataReceived));
+        if (Party.IsValid())
+        {
+            Party->AddOnPartyInvitesChangedDelegate_Handle(
+                FOnPartyInvitesChangedDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnPartyInvitesChanged));
+            Party->AddOnPartyDataReceivedDelegate_Handle(
+                FOnPartyDataReceivedDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnPartyDataReceived));
+        }
         Session->AddOnSessionUserInviteAcceptedDelegate_Handle(FOnSessionUserInviteAcceptedDelegate::CreateUObject(
             this,
             &UExampleCPPSubsystem::OnSessionUserInviteAccepted));
         Session->AddOnJoinSessionCompleteDelegate_Handle(
             FOnJoinSessionCompleteDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnSessionJoinedViaOverlay));
-        Presence->AddOnPresenceReceivedDelegate_Handle(
-            FOnPresenceReceivedDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnPresenceReceived));
+        if (Presence.IsValid())
+        {
+            Presence->AddOnPresenceReceivedDelegate_Handle(
+                FOnPresenceReceivedDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnPresenceReceived));
+        }
     }
 }
