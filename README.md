@@ -6,7 +6,7 @@ These example projects demonstrate how to use [the EOS Online Subsystem plugin](
 
 Click through to the README for the particular example you are interested in.
 
-- [Blueprints Example for Unreal Engine 4.26](./ExampleBlueprints_EOS_4.26/README.md) (requires Online Subsystem Blueprints)
+- [Blueprints Example for Unreal Engine 4.26](./ExampleBP_EOS_4.26/README.md) (requires Online Subsystem Blueprints)
 - [C++ Example for Unreal Engine 4.26](./ExampleCPP_EOS_4.26/README.md)
 
 If you would like to deploy the C++ example as a dedicated server running on Kubernetes, refer to [the Agones example documentation](./AgonesResources/).

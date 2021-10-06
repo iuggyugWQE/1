@@ -86,6 +86,46 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(
     bWasSuccessful,
     const TArray<FExampleCPPLeaderboardEntry> &,
     LeaderboardEntries);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubsystemReadTitleFileComplete,
+    bool,
+    bWasSuccessful,
+    const FString &,
+    FileName);
+DECLARE_DYNAMIC_DELEGATE_ThreeParams(
+    FExampleCPPSubsystemEnumerateTitleFilesComplete,
+    bool,
+    bWasSuccessful,
+    const TArray<FString> &,
+    FileNames,
+    const FString &,
+    Error);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemWriteUserFileComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_TwoParams(
+    FExampleCPPSubsystemWriteUserFileProgress,
+    float,
+    Percent,
+    const FString &,
+    FileName);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExampleCPPSubsystemWriteUserFileCancelled, bool, bWasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubsystemReadUserFileAsStringComplete,
+    bool,
+    WasSuccessful,
+    const FString &,
+    FileData);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubsystemReadUserFileAsSaveGameComplete,
+    bool,
+    WasSuccessful,
+    class USaveGame *,
+    FileData);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubsystemEnumerateUserFilesComplete,
+    bool,
+    WasSuccessful,
+    const TArray<FCloudFileDataCPP> &,
+    FileData);
 
 UCLASS(BlueprintType)
 class EXAMPLEOSS_API UExampleCPPSubsystem : public UGameInstanceSubsystem
@@ -501,7 +541,96 @@ private:
 
     /********** ExampleCPPSubsystem.TitleFile.cpp **********/
 
+public:
+    UFUNCTION(BlueprintCallable, Category = "Title")
+    void ReadTitleFile(const FString &FileName, FExampleCPPSubsystemReadTitleFileComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, Category = "Title")
+    void EnumerateTitleFiles(
+        FExampleCPPSubsystemEnumerateTitleFilesComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, Category = "Title")
+    FString GetFileContents(const FString &FileName);
+
+    void HandleReadTitleFileComplete(
+        bool WasSuccessful,
+        const FString &FileName,
+        FExampleCPPSubsystemReadTitleFileComplete OnDone);
+
+    void HandleEnumerateTitleFilesCompelte(
+        bool WasSuccessful,
+        const FString &Error,
+        FExampleCPPSubsystemEnumerateTitleFilesComplete OnDone);
+
+private:
+    static FString ReadFileDataAsString(UCPPFileData *FileData);
+
     /********** ExampleCPPSubsystem.UserCloud.cpp **********/
+
+private:
+    void WriteUserFile(
+        const FString &FileName,
+        TArray<uint8> &FileData,
+        FExampleCPPSubsystemWriteUserFileComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, Category = "User Cloud")
+    void WriteUserFileFromString(
+        const FString &FileName,
+        const FString &FileData,
+        FExampleCPPSubsystemWriteUserFileComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, Category = "User Cloud")
+    void WriteUserFileFromSaveGame(
+        const FString &FileName,
+        class USaveGame *SaveGame,
+        FExampleCPPSubsystemWriteUserFileComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, Category = "User Cloud")
+    void ReadUserFileAsString(const FString &FileName, FExampleCPPSubsystemReadUserFileAsStringComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, Category = "User Cloud")
+    void ReadUserFileAsSaveGame(const FString &FileName, FExampleCPPSubsystemReadUserFileAsSaveGameComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, Category = "User Cloud")
+    void EnumerateUserFiles(FExampleCPPSubsystemEnumerateUserFilesComplete OnDone);
+
+    void HandleWriteUserFileComplete(
+        bool WasSuccessful,
+        const FUniqueNetId &UserId,
+        const FString &FileName,
+        FExampleCPPSubsystemWriteUserFileComplete OnDone);
+
+    void HandleWriteUserFileCancelled(bool WasSuccessful, const FUniqueNetId &UserId, const FString &FileName);
+
+    void HandleWriteUserFileProgress(
+        int32 BytesWritten,
+        const FUniqueNetId &UserId,
+        const FString &FileName,
+        int32 TotalFileSize);
+
+    void HandleReadUserFileComplete(
+        bool WasSuccessful,
+        const FUniqueNetId &UserId,
+        const FString &FileName,
+        FExampleCPPSubsystemReadUserFileAsStringComplete OnDone);
+
+    void HandleReadUserFileComplete(
+        bool WasSuccessful,
+        const FUniqueNetId &UserId,
+        const FString &FileName,
+        FExampleCPPSubsystemReadUserFileAsSaveGameComplete OnDone);
+
+    void HandleEnumerateUserFilesComplete(
+        bool WasSuccessful,
+        const FUniqueNetId &UserId,
+        FExampleCPPSubsystemEnumerateUserFilesComplete OnDone);
+
+    UPROPERTY(BlueprintAssignable, Category = "User Cloud")
+    FExampleCPPSubsystemWriteUserFileProgress ExampleCPPSubsystemWriteUserFileProgress;
+
+    UPROPERTY(BlueprintAssignable, Category = "User Cloud")
+    FExampleCPPSubsystemWriteUserFileCancelled ExampleCPPSubsystemWriteUserFileCancelled;
 
     /********** ExampleCPPSubsystem.UserInfo.cpp **********/
 

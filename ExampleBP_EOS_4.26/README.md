@@ -6,7 +6,7 @@ Although this example comes preconfigured for EOS, you can use it with any onlin
 
 ### Getting started
 
-This example project requires at least EOS Online Subsystem 2021.08.17 and Online Subsystem Blueprints 2021.08.17. Please make sure you have the latest versions installed through the Epic Games Launcher, or the example project won't work.
+This example project requires at least EOS Online Subsystem 2021.07.06 and Online Subsystem Blueprints 2021.07.07. Please make sure you have the latest versions installed through the Epic Games Launcher, or the example project won't work.
 
 ### Configure EOS
 
