@@ -30,6 +30,7 @@
 #include "TitleFile/TitleFileTypes.h"
 #include "UserCloud/UserCloudTypes.h"
 #include "UserInfo/UserInfoTypes.h"
+#include "VoiceChat/VoiceTypes.h"
 
 #include "ExampleCPPSubsystem.generated.h"
 
@@ -132,6 +133,24 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(
     bWasSuccessful,
     const TSoftObjectPtr<class UTexture2D> &,
     ResultTexture);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubsystemOnVoiceChatLoginComplete,
+    const FString &,
+    PlayerName,
+    const FVoiceChatResultCPP &,
+    VoiceChatLogin);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubsystemOnVoiceChatLogoutComplete,
+    const FString &,
+    PlayerName,
+    const FVoiceChatResultCPP &,
+    VoiceChatLogin);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubsystemOnVoiceChatChannelJoinedComplete,
+    const FString &,
+    ChannelName,
+    const FVoiceChatResultCPP &,
+    VoiceChatResult);
 
 UCLASS(BlueprintType)
 class EXAMPLEOSS_API UExampleCPPSubsystem : public UGameInstanceSubsystem
@@ -648,6 +667,55 @@ public:
 
     UPROPERTY(BlueprintAssignable, Category = "User Cloud")
     FExampleCPPSubsystemWriteUserFileCancelled ExampleCPPSubsystemWriteUserFileCancelled;
+
+    /********** ExampleCPPSubsystem.VoiceChat.cpp **********/
+
+public:
+    /* Creates a voice chat user. Sets the PrimaryVoiceUser if it's not already set. */
+    UFUNCTION(BlueprintCallable, Category = "Voice")
+    void CreateVoiceChatUser();
+
+    UFUNCTION(BlueprintCallable, Category = "Voice")
+    void LoginToVoice(class AVoiceChatServices *VoiceChatService, FExampleCPPSubsystemOnVoiceChatLoginComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, Category = "Voice")
+    void LogoutOfVoice(
+        class AVoiceChatServices *VoiceChatService,
+        FExampleCPPSubsystemOnVoiceChatLogoutComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, Category = "Voice")
+    void JoinVoiceChannel(
+        class AVoiceChatServices *VoiceChatService,
+        const FString &ChannelName,
+        const FString &ChannelCredentials,
+        const EVoiceChatChannelTypeCPP ChannelType,
+        const struct FVoiceChatChannel3dPropertiesCPP Channel3dProperties,
+        FExampleCPPSubsystemOnVoiceChatChannelJoinedComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, Category = "Voice")
+    bool IsConnected();
+
+    UFUNCTION(BlueprintCallable, Category = "Voice")
+    bool IsConnecting();
+
+    class IVoiceChatUser *PrimaryVoiceUser;
+
+private:
+    void HandleVoiceChatLoginComplete(
+        const FString &PlayerName,
+        const FVoiceChatResult &Result,
+        FExampleCPPSubsystemOnVoiceChatLoginComplete OnDone);
+
+    void HandleVoiceChatLogoutComplete(
+        const FString &PlayerName,
+        const FVoiceChatResult &Result,
+        class AVoiceChatServices *VoiceChatService,
+        FExampleCPPSubsystemOnVoiceChatLogoutComplete OnDone);
+
+    void HandleVoiceChatJoinChannelComplete(
+        const FString &ChannelName,
+        const FVoiceChatResult &Result,
+        FExampleCPPSubsystemOnVoiceChatChannelJoinedComplete OnDone);
 
     /********** ExampleCPPSubsystem.UserInfo.cpp **********/
 
