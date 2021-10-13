@@ -126,6 +126,12 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(
     WasSuccessful,
     const TArray<FCloudFileDataCPP> &,
     FileData);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubsystemGetAvatarComplete,
+    bool,
+    bWasSuccessful,
+    const TSoftObjectPtr<class UTexture2D> &,
+    ResultTexture);
 
 UCLASS(BlueprintType)
 class EXAMPLEOSS_API UExampleCPPSubsystem : public UGameInstanceSubsystem
@@ -203,6 +209,18 @@ private:
         FExampleCPPSubsystemLogoutComplete OnDone);
 
     /********** ExampleCPPSubsystem.Avatar.cpp **********/
+
+    UFUNCTION(BlueprintCallable, Category = "Avatar")
+    void GetAvatar(
+        int32 LocalUserId,
+        const FUniqueNetIdRepl &TargetUserId,
+        class UTexture2D *DefaultTexture,
+        FExampleCPPSubsystemGetAvatarComplete OnDone);
+
+    void HandleGetAvatarComplete(
+        bool bWasSucessful,
+        TSoftObjectPtr<class UTexture2D> ResultTexture,
+        FExampleCPPSubsystemGetAvatarComplete OnDone);
 
     /********** ExampleCPPSubsystem.Friends.cpp **********/
 
@@ -546,8 +564,7 @@ public:
     void ReadTitleFile(const FString &FileName, FExampleCPPSubsystemReadTitleFileComplete OnDone);
 
     UFUNCTION(BlueprintCallable, Category = "Title")
-    void EnumerateTitleFiles(
-        FExampleCPPSubsystemEnumerateTitleFilesComplete OnDone);
+    void EnumerateTitleFiles(FExampleCPPSubsystemEnumerateTitleFilesComplete OnDone);
 
     UFUNCTION(BlueprintCallable, Category = "Title")
     FString GetFileContents(const FString &FileName);

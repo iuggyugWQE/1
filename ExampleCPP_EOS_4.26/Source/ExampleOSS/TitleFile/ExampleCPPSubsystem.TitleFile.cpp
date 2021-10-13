@@ -34,8 +34,7 @@ void UExampleCPPSubsystem::ReadTitleFile(const FString &FileName, FExampleCPPSub
     Title->ReadFile(FileName);
 }
 
-void UExampleCPPSubsystem::EnumerateTitleFiles(
-    FExampleCPPSubsystemEnumerateTitleFilesComplete OnDone)
+void UExampleCPPSubsystem::EnumerateTitleFiles(FExampleCPPSubsystemEnumerateTitleFilesComplete OnDone)
 {
     IOnlineSubsystem *Subsystem = Online::GetSubsystem(this->GetWorld());
     if (Subsystem == nullptr)
