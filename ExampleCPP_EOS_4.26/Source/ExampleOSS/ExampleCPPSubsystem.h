@@ -1,4 +1,4 @@
-// Copyright 2020 June Rhodes. All Rights Reserved.
+// Copyright June Rhodes. MIT Licensed.
 
 #pragma once
 
@@ -151,6 +151,24 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(
     ChannelName,
     const FVoiceChatResultCPP &,
     VoiceChatResult);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubsystemOnCreateOrConnectLobbyComplete,
+    const FExampleCPPCreateOrConnectLobbyResult &,
+    LobbyResult,
+    bool,
+    bWasSucessful);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubssytemOnSearchLobbyComplete,
+    const FExampleCPPLobbySearchResult &,
+    SearchResult,
+    bool,
+    bWasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_TwoParams(
+    FExampleCPPSubssytemOnUpdateLobbyComplete,
+    const FExampleCPPUpdateLobbyResult &,
+    SearchResult,
+    bool,
+    bWasSuccessful);
 
 UCLASS(BlueprintType)
 class EXAMPLEOSS_API UExampleCPPSubsystem : public UGameInstanceSubsystem
@@ -282,6 +300,63 @@ private:
         FExampleCPPSubsystemQueryLeaderboardsComplete OnDone);
 
     /********** ExampleCPPSubsystem.Lobbies.cpp **********/
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void CreateLobby(const int64 &ExampleAttributeData, FExampleCPPSubsystemOnCreateOrConnectLobbyComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void ConnectLobby(class UExampleCPPLobbyId *LobbyId, FExampleCPPSubsystemOnCreateOrConnectLobbyComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void DisconnectLobby(class UExampleCPPLobbyId *LobbyId, FExampleCPPSubsystemOnCreateOrConnectLobbyComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void SearchLobby(FExampleCPPSubssytemOnSearchLobbyComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void UpdateLobby(
+        class UExampleCPPLobbyId *LobbyId,
+        const int64 &ExampleAttributeData,
+        FExampleCPPSubssytemOnUpdateLobbyComplete OnDone);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    bool GetMemberCount(class UExampleCPPLobbyId *LobbyId, int32 &OutMemberCount);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    bool GetMemberUserId(class UExampleCPPLobbyId *LobbyId, const int32 &MemberIndex, FUniqueNetIdRepl &OutMemberId);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    class UExampleCPPPartyInvite *ConvertLobbyIdToPartyJoinInfo(class UExampleCPPLobbyId *LobbyId);
+
+protected:
+    void HandleCreateLobbyComplete(
+        const FOnlineError &Error,
+        const FUniqueNetId &UserId,
+        const TSharedPtr<class FOnlineLobby> &Lobby,
+        FExampleCPPSubsystemOnCreateOrConnectLobbyComplete OnDone);
+
+    void HandleConnectLobbyComplete(
+        const FOnlineError &Error,
+        const FUniqueNetId &UserId,
+        const TSharedPtr<class FOnlineLobby> &Lobby,
+        FExampleCPPSubsystemOnCreateOrConnectLobbyComplete OnDone);
+
+    void HandleDisconnectLobbyComplete(
+        const FOnlineError &Error,
+        const FUniqueNetId &UserId,
+        FExampleCPPSubsystemOnCreateOrConnectLobbyComplete OnDone);
+
+    void HandleSearchLobbyComplete(
+        const FOnlineError &Error,
+        const FUniqueNetId &UserId,
+        const TArray<TSharedRef<const FOnlineLobbyId>> &LobbyIds,
+        FExampleCPPSubssytemOnSearchLobbyComplete OnDone);
+
+    void HandleUpdateLobbyComplete(
+        const FOnlineError &Error,
+        const FUniqueNetId &UserId,
+        FExampleCPPSubssytemOnUpdateLobbyComplete OnDone);
 
     /********** ExampleCPPSubsystem.Multiplayer.cpp **********/
 

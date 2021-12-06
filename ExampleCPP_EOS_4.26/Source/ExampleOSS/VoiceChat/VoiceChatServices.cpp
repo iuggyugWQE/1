@@ -1,337 +1,323 @@
-// Copyright 2020 June Rhodes. All Rights Reserved.
-#pragma once
+// Copyright June Rhodes. MIT Licensed.
 
 #include "VoiceChatServices.h"
 #include "ExampleOSS/ExampleCPPSubsystem.h"
 #include "VoiceChat.h"
 
-
 AVoiceChatServices::AVoiceChatServices()
 {
-
 }
 
 void AVoiceChatServices::BeginPlay()
 {
-	Super::BeginPlay();
+    Super::BeginPlay();
 
-	IVoiceChatUser* VoiceUser = CreateUser();
-	if(VoiceUser == nullptr)
-	{
-		VoiceChatUser = VoiceUser;
-	}
-	else
-	{
-		UExampleCPPSubsystem* CPPSubsystem = GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
-		if(CPPSubsystem)
-		{
-			VoiceChatUser = CPPSubsystem->PrimaryVoiceUser;
-		}
-	}
+    IVoiceChatUser *VoiceUser = CreateUser();
+    if (VoiceUser == nullptr)
+    {
+        VoiceChatUser = VoiceUser;
+    }
+    else
+    {
+        UExampleCPPSubsystem *CPPSubsystem =
+            GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
+        if (CPPSubsystem)
+        {
+            VoiceChatUser = CPPSubsystem->PrimaryVoiceUser;
+        }
+    }
 
-	SetupVoiceDelegates();
+    SetupVoiceDelegates();
 }
 
 void AVoiceChatServices::BeginDestroy()
 {
-	IVoiceChat* VoiceChat = IVoiceChat::Get();
-	if(VoiceChat && VoiceChatUser)
-	{
-		VoiceChat->ReleaseUser(VoiceChatUser);
-		VoiceChatUser = nullptr;
-	}
-	
-	Super::BeginDestroy();
+    IVoiceChat *VoiceChat = IVoiceChat::Get();
+    if (VoiceChat && VoiceChatUser)
+    {
+        VoiceChat->ReleaseUser(VoiceChatUser);
+        VoiceChatUser = nullptr;
+    }
+
+    Super::BeginDestroy();
 }
 
 void AVoiceChatServices::SetupVoiceDelegates()
 {
-	if(VoiceChatUser == nullptr)
-	{
-		return;
-	}
+    if (VoiceChatUser == nullptr)
+    {
+        return;
+    }
 
-	VoiceChatUser->OnVoiceChatAvailableAudioDevicesChanged().AddUObject(this, &AVoiceChatServices::HandleAudioDevicesChanged);
-	VoiceChatUser->OnVoiceChatChannelJoined().AddUObject(this, &AVoiceChatServices::HandleVoiceChatChannelJoined);
-	VoiceChatUser->OnVoiceChatChannelExited().AddUObject(this, &AVoiceChatServices::HandleVoiceChatChannelExited);
-	VoiceChatUser->OnVoiceChatPlayerAdded().AddUObject(this, &AVoiceChatServices::HandleVoiceChatPlayerAdded);
-	VoiceChatUser->OnVoiceChatPlayerRemoved().AddUObject(this, &AVoiceChatServices::HandleVoiceChatPlayerRemoved);
-	VoiceChatUser->OnVoiceChatPlayerMuteUpdated().AddUObject(this, &AVoiceChatServices::HandleVoiceChatPlayerMuteUpdated);
-	VoiceChatUser->OnVoiceChatPlayerTalkingUpdated().AddUObject(this, &AVoiceChatServices::HandleVoiceChatPlayerTalkingUpdated);
+    VoiceChatUser->OnVoiceChatAvailableAudioDevicesChanged().AddUObject(
+        this,
+        &AVoiceChatServices::HandleAudioDevicesChanged);
+    VoiceChatUser->OnVoiceChatChannelJoined().AddUObject(this, &AVoiceChatServices::HandleVoiceChatChannelJoined);
+    VoiceChatUser->OnVoiceChatChannelExited().AddUObject(this, &AVoiceChatServices::HandleVoiceChatChannelExited);
+    VoiceChatUser->OnVoiceChatPlayerAdded().AddUObject(this, &AVoiceChatServices::HandleVoiceChatPlayerAdded);
+    VoiceChatUser->OnVoiceChatPlayerRemoved().AddUObject(this, &AVoiceChatServices::HandleVoiceChatPlayerRemoved);
+    VoiceChatUser->OnVoiceChatPlayerMuteUpdated().AddUObject(
+        this,
+        &AVoiceChatServices::HandleVoiceChatPlayerMuteUpdated);
+    VoiceChatUser->OnVoiceChatPlayerTalkingUpdated().AddUObject(
+        this,
+        &AVoiceChatServices::HandleVoiceChatPlayerTalkingUpdated);
 }
 
-IVoiceChatUser* AVoiceChatServices::CreateUser()
+IVoiceChatUser *AVoiceChatServices::CreateUser()
 {
-	UExampleCPPSubsystem* CPPSubsystem = GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
-	if(CPPSubsystem == nullptr)
-	{
-		return nullptr;
-	}
+    UExampleCPPSubsystem *CPPSubsystem =
+        GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
+    if (CPPSubsystem == nullptr)
+    {
+        return nullptr;
+    }
 
-	CPPSubsystem->CreateVoiceChatUser();
-	return CPPSubsystem->PrimaryVoiceUser;
+    CPPSubsystem->CreateVoiceChatUser();
+    return CPPSubsystem->PrimaryVoiceUser;
 }
 
-IVoiceChatUser* AVoiceChatServices::GetVoiceChatUser()
+IVoiceChatUser *AVoiceChatServices::GetVoiceChatUser()
 {
-	return VoiceChatUser;
+    return VoiceChatUser;
 }
 
 TArray<FString> AVoiceChatServices::GetAvailableInputDevices_Implementation()
 {
-	TArray<FVoiceChatDeviceInfo> VoiceChatDevices = VoiceChatUser->GetAvailableInputDeviceInfos(); 
-	TArray<FString> InputDevices;
-	InputDevices.Reserve(VoiceChatDevices.Num());
-	for(auto&& Device : VoiceChatDevices)
-	{
-		InputDevices.Add(Device.DisplayName + TEXT("--") + Device.Id);
-	}
-	
-	return InputDevices;	
+    TArray<FVoiceChatDeviceInfo> VoiceChatDevices = VoiceChatUser->GetAvailableInputDeviceInfos();
+    TArray<FString> InputDevices;
+    InputDevices.Reserve(VoiceChatDevices.Num());
+    for (auto &&Device : VoiceChatDevices)
+    {
+        InputDevices.Add(Device.DisplayName + TEXT("--") + Device.Id);
+    }
+
+    return InputDevices;
 }
 
 TArray<FString> AVoiceChatServices::GetAvailableOutputDevices_Implementation()
 {
-	TArray<FVoiceChatDeviceInfo> VoiceChatDevices = VoiceChatUser->GetAvailableOutputDeviceInfos(); 
-	TArray<FString> OutputDevices;
-	OutputDevices.Reserve(VoiceChatDevices.Num());
-	for(auto&& Device : VoiceChatDevices)
-	{
-		OutputDevices.Add(Device.DisplayName + TEXT("--") + Device.Id);
-	}
+    TArray<FVoiceChatDeviceInfo> VoiceChatDevices = VoiceChatUser->GetAvailableOutputDeviceInfos();
+    TArray<FString> OutputDevices;
+    OutputDevices.Reserve(VoiceChatDevices.Num());
+    for (auto &&Device : VoiceChatDevices)
+    {
+        OutputDevices.Add(Device.DisplayName + TEXT("--") + Device.Id);
+    }
 
-	return OutputDevices;
+    return OutputDevices;
 }
 
 FString AVoiceChatServices::GetCurrentInputDevice_Implementation()
 {
-	const FVoiceChatDeviceInfo VoiceChatDevice = VoiceChatUser->GetInputDeviceInfo();
-	FString DeviceInfo = VoiceChatDevice.DisplayName + TEXT("--") + VoiceChatDevice.Id;
-	return DeviceInfo;
+    const FVoiceChatDeviceInfo VoiceChatDevice = VoiceChatUser->GetInputDeviceInfo();
+    FString DeviceInfo = VoiceChatDevice.DisplayName + TEXT("--") + VoiceChatDevice.Id;
+    return DeviceInfo;
 }
 
 FString AVoiceChatServices::GetCurrentOutputDevice_Implementation()
 {
-	const FVoiceChatDeviceInfo VoiceChatDevice = VoiceChatUser->GetOutputDeviceInfo();
-	FString DeviceInfo = VoiceChatDevice.DisplayName + TEXT("--") + VoiceChatDevice.Id;
-	return DeviceInfo;
+    const FVoiceChatDeviceInfo VoiceChatDevice = VoiceChatUser->GetOutputDeviceInfo();
+    FString DeviceInfo = VoiceChatDevice.DisplayName + TEXT("--") + VoiceChatDevice.Id;
+    return DeviceInfo;
 }
 
-void AVoiceChatServices::SetInputDevice_Implementation(const FString& Device)
+void AVoiceChatServices::SetInputDevice_Implementation(const FString &Device)
 {
-	FString DeviceName;
-	FString DeviceId;
-	Device.Split(TEXT("--"), &DeviceName, &DeviceId);
-	VoiceChatUser->SetInputDeviceId(DeviceId);	
+    FString DeviceName;
+    FString DeviceId;
+    Device.Split(TEXT("--"), &DeviceName, &DeviceId);
+    VoiceChatUser->SetInputDeviceId(DeviceId);
 }
 
-void AVoiceChatServices::SetOutputDevice_Implementation(
-	const FString& Device)
+void AVoiceChatServices::SetOutputDevice_Implementation(const FString &Device)
 {
-	FString DeviceName;
-	FString DeviceId;
-	Device.Split(TEXT("--"), &DeviceName, &DeviceId);
-	VoiceChatUser->SetOutputDeviceId(DeviceId);	
+    FString DeviceName;
+    FString DeviceId;
+    Device.Split(TEXT("--"), &DeviceName, &DeviceId);
+    VoiceChatUser->SetOutputDeviceId(DeviceId);
 }
 
 bool AVoiceChatServices::IsLoggedIn_Implementation()
 {
-	return VoiceChatUser->IsLoggedIn();
+    return VoiceChatUser->IsLoggedIn();
 }
 
 FString AVoiceChatServices::GetLoggedInPlayerName_Implementation()
 {
-	return VoiceChatUser->GetLoggedInPlayerName();
+    return VoiceChatUser->GetLoggedInPlayerName();
 }
 
 bool AVoiceChatServices::IsConnecting_Implementation()
 {
-	UExampleCPPSubsystem* CPPSubsystem = GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
-	return CPPSubsystem ? CPPSubsystem->IsConnecting() : false;
+    UExampleCPPSubsystem *CPPSubsystem =
+        GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
+    return CPPSubsystem ? CPPSubsystem->IsConnecting() : false;
 }
 
 bool AVoiceChatServices::IsConnected_Implementation()
 {
-	UExampleCPPSubsystem* CPPSubsystem = GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
-	return CPPSubsystem ? CPPSubsystem->IsConnected() : false;
+    UExampleCPPSubsystem *CPPSubsystem =
+        GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
+    return CPPSubsystem ? CPPSubsystem->IsConnected() : false;
 }
 
 TArray<FString> AVoiceChatServices::GetJoinedChannels()
 {
-	const TArray<FString> JoinedChannels = VoiceChatUser->GetChannels();
-	BP_GetJoinedChannels(JoinedChannels);
-	return JoinedChannels;
+    const TArray<FString> JoinedChannels = VoiceChatUser->GetChannels();
+    BP_GetJoinedChannels(JoinedChannels);
+    return JoinedChannels;
 }
 
-TArray<FString> AVoiceChatServices::GetPlayersInChannel(
-	const FString& ChannelName)
+TArray<FString> AVoiceChatServices::GetPlayersInChannel(const FString &ChannelName)
 {
-	const TArray<FString> Players = VoiceChatUser->GetPlayersInChannel(ChannelName);
-	BP_GetPlayersInChannel(Players);
-	return Players;
+    const TArray<FString> Players = VoiceChatUser->GetPlayersInChannel(ChannelName);
+    BP_GetPlayersInChannel(Players);
+    return Players;
 }
 
 float AVoiceChatServices::GetInputVolume_Implementation()
 {
-	return VoiceChatUser->GetAudioInputVolume();
+    return VoiceChatUser->GetAudioInputVolume();
 }
 
-void AVoiceChatServices::SetInputVolume_Implementation(
-	const float& Volume)
+void AVoiceChatServices::SetInputVolume_Implementation(const float &Volume)
 {
-	VoiceChatUser->SetAudioInputVolume(Volume);
+    VoiceChatUser->SetAudioInputVolume(Volume);
 }
 
 float AVoiceChatServices::GetOutputVolume_Implementation()
 {
-	return VoiceChatUser->GetAudioOutputVolume();
+    return VoiceChatUser->GetAudioOutputVolume();
 }
 
-void AVoiceChatServices::SetOutputVolume_Implementation(
-	const float& Volume)
+void AVoiceChatServices::SetOutputVolume_Implementation(const float &Volume)
 {
-	VoiceChatUser->SetAudioOutputVolume(Volume);
+    VoiceChatUser->SetAudioOutputVolume(Volume);
 }
 
 bool AVoiceChatServices::GetInputMuted_Implementation()
 {
-	return VoiceChatUser->GetAudioInputDeviceMuted();
+    return VoiceChatUser->GetAudioInputDeviceMuted();
 }
 
-void AVoiceChatServices::SetInputMuted_Implementation(
-	bool bMuted)
+void AVoiceChatServices::SetInputMuted_Implementation(bool bMuted)
 {
-	VoiceChatUser->SetAudioInputDeviceMuted(bMuted);
+    VoiceChatUser->SetAudioInputDeviceMuted(bMuted);
 }
 
 bool AVoiceChatServices::GetOutputMuted_Implementation()
 {
-	return VoiceChatUser->GetAudioOutputDeviceMuted();
+    return VoiceChatUser->GetAudioOutputDeviceMuted();
 }
 
-void AVoiceChatServices::SetOutputMuted_Implementation(
-	bool bMuted)
+void AVoiceChatServices::SetOutputMuted_Implementation(bool bMuted)
 {
-	VoiceChatUser->SetAudioOutputDeviceMuted(bMuted);
+    VoiceChatUser->SetAudioOutputDeviceMuted(bMuted);
 }
 
 EVoiceChatTransmitModeCPP AVoiceChatServices::GetTransmitMode_Implementation()
 {
-	const EVoiceChatTransmitMode TransmitMode = VoiceChatUser->GetTransmitMode();
-	EVoiceChatTransmitModeCPP OutTransmitMode;
-	switch (TransmitMode)
-	{
-	case EVoiceChatTransmitMode::All:
-		OutTransmitMode = EVoiceChatTransmitModeCPP::All;
-		break;
-	case EVoiceChatTransmitMode::Channel:
-		OutTransmitMode = EVoiceChatTransmitModeCPP::Channel;
-		break;
-	case EVoiceChatTransmitMode::None:
-	default:
-		OutTransmitMode = EVoiceChatTransmitModeCPP::None;
-	}
+    const EVoiceChatTransmitMode TransmitMode = VoiceChatUser->GetTransmitMode();
+    EVoiceChatTransmitModeCPP OutTransmitMode;
+    switch (TransmitMode)
+    {
+    case EVoiceChatTransmitMode::All:
+        OutTransmitMode = EVoiceChatTransmitModeCPP::All;
+        break;
+    case EVoiceChatTransmitMode::Channel:
+        OutTransmitMode = EVoiceChatTransmitModeCPP::Channel;
+        break;
+    case EVoiceChatTransmitMode::None:
+    default:
+        OutTransmitMode = EVoiceChatTransmitModeCPP::None;
+    }
 
-	return OutTransmitMode;
+    return OutTransmitMode;
 }
 
-void AVoiceChatServices::SetTransmitMode_Implementation(
-	const EVoiceChatTransmitModeCPP& TransmitMode)
-{	
-	switch (TransmitMode)
-	{
-	case EVoiceChatTransmitModeCPP::All:
-		{
-			VoiceChatUser->TransmitToAllChannels();
-			break;
-		}
-	case EVoiceChatTransmitModeCPP::Channel:
-		{
-			// Default to transmitting to the first channel the user is in
-			TArray<FString> ChannelNames = GetJoinedChannels();
-			if(ChannelNames.IsValidIndex(0))
-			{
-				/**
-				* @note EOS Can transmit to several specific channels at once. This example is just using the first
-				* channel the user is in. If you want a user to transmit to multiple voice channels at once, you'll
-				* need to pick the specific channel names you want the user to transmit to and then call TransmitToSpecificChannel
-				* for each channel.
-				*
-				* Additionally, you need to call TransmitToNoChannels first to clear the slate before you specify a channel
-				* to transmit to.
-				*/
-				VoiceChatUser->TransmitToNoChannels();
-				VoiceChatUser->TransmitToSpecificChannel(ChannelNames[0]);
-			}
-			break;
-		}
-	case EVoiceChatTransmitModeCPP::None:
-	default:
-		{
-			VoiceChatUser->TransmitToNoChannels();
-		}
-	}	
-}
-
-bool AVoiceChatServices::IsPlayerMuted(
-	const FString& PlayerName)
+void AVoiceChatServices::SetTransmitMode_Implementation(const EVoiceChatTransmitModeCPP &TransmitMode)
 {
-	return VoiceChatUser->IsPlayerMuted(PlayerName);
+    switch (TransmitMode)
+    {
+    case EVoiceChatTransmitModeCPP::All: {
+        VoiceChatUser->TransmitToAllChannels();
+        break;
+    }
+    case EVoiceChatTransmitModeCPP::Channel: {
+        // Default to transmitting to the first channel the user is in
+        TArray<FString> ChannelNames = GetJoinedChannels();
+        if (ChannelNames.IsValidIndex(0))
+        {
+            /**
+             * @note EOS Can transmit to several specific channels at once. This example is just using the first
+             * channel the user is in. If you want a user to transmit to multiple voice channels at once, you'll
+             * need to pick the specific channel names you want the user to transmit to and then call
+             * TransmitToSpecificChannel for each channel.
+             *
+             * Additionally, you need to call TransmitToNoChannels first to clear the slate before you specify a channel
+             * to transmit to.
+             */
+            VoiceChatUser->TransmitToNoChannels();
+            VoiceChatUser->TransmitToSpecificChannel(ChannelNames[0]);
+        }
+        break;
+    }
+    case EVoiceChatTransmitModeCPP::None:
+    default: {
+        VoiceChatUser->TransmitToNoChannels();
+    }
+    }
 }
 
-bool AVoiceChatServices::IsPlayerTalking(
-	const FString& PlayerName)
+bool AVoiceChatServices::IsPlayerMuted(const FString &PlayerName)
 {
-	return VoiceChatUser->IsPlayerTalking(PlayerName);
+    return VoiceChatUser->IsPlayerMuted(PlayerName);
+}
+
+bool AVoiceChatServices::IsPlayerTalking(const FString &PlayerName)
+{
+    return VoiceChatUser->IsPlayerTalking(PlayerName);
 }
 
 void AVoiceChatServices::HandleAudioDevicesChanged()
 {
-	OnAudioDevicesChanged.Broadcast();
+    OnAudioDevicesChanged.Broadcast();
 }
 
-void AVoiceChatServices::HandleVoiceChatChannelJoined(
-	const FString& ChannelName)
+void AVoiceChatServices::HandleVoiceChatChannelJoined(const FString &ChannelName)
 {
-	OnVoiceChatChannelJoined.Broadcast(ChannelName);
+    OnVoiceChatChannelJoined.Broadcast(ChannelName);
 }
 
-void AVoiceChatServices::HandleVoiceChatChannelExited(
-	const FString& ChannelName,
-	const FVoiceChatResult& Result)
+void AVoiceChatServices::HandleVoiceChatChannelExited(const FString &ChannelName, const FVoiceChatResult &Result)
 {
-	FVoiceChatResultCPP VoiceChatResultCPP = FVoiceChatResult(Result);
-	OnVoiceChatChannelExited.Broadcast(ChannelName, VoiceChatResultCPP);
+    FVoiceChatResultCPP VoiceChatResultCPP = FVoiceChatResult(Result);
+    OnVoiceChatChannelExited.Broadcast(ChannelName, VoiceChatResultCPP);
 }
 
-void AVoiceChatServices::HandleVoiceChatPlayerAdded(
-	const FString& ChannelName,
-	const FString& PlayerName)
+void AVoiceChatServices::HandleVoiceChatPlayerAdded(const FString &ChannelName, const FString &PlayerName)
 {
-	OnVoiceChatPlayerAdded.Broadcast(ChannelName, PlayerName);
+    OnVoiceChatPlayerAdded.Broadcast(ChannelName, PlayerName);
 }
 
-void AVoiceChatServices::HandleVoiceChatPlayerRemoved(
-	const FString& ChannelName,
-	const FString& PlayerName)
+void AVoiceChatServices::HandleVoiceChatPlayerRemoved(const FString &ChannelName, const FString &PlayerName)
 {
-	OnVoiceChatPlayerRemoved.Broadcast(ChannelName, PlayerName);
+    OnVoiceChatPlayerRemoved.Broadcast(ChannelName, PlayerName);
 }
 
 void AVoiceChatServices::HandleVoiceChatPlayerMuteUpdated(
-	const FString& ChannelName,
-	const FString& PlayerName,
-	bool bIsMuted)
+    const FString &ChannelName,
+    const FString &PlayerName,
+    bool bIsMuted)
 {
-	OnVoiceChatPlayerMuteUpdated.Broadcast(ChannelName, PlayerName, bIsMuted);
+    OnVoiceChatPlayerMuteUpdated.Broadcast(ChannelName, PlayerName, bIsMuted);
 }
 
 void AVoiceChatServices::HandleVoiceChatPlayerTalkingUpdated(
-	const FString& ChannelName,
-	const FString& PlayerName,
-	bool bIsTalking)
+    const FString &ChannelName,
+    const FString &PlayerName,
+    bool bIsTalking)
 {
-	OnVoiceChatPlayerTalkingUpdated.Broadcast(ChannelName, PlayerName, bIsTalking);
+    OnVoiceChatPlayerTalkingUpdated.Broadcast(ChannelName, PlayerName, bIsTalking);
 }
-
-

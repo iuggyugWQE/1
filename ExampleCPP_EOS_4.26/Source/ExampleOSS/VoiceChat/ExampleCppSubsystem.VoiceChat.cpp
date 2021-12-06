@@ -1,5 +1,4 @@
-// Copyright 2020 June Rhodes. All Rights Reserved.
-#pragma once
+// Copyright June Rhodes. MIT Licensed.
 
 #include "../ExampleCPPSubsystem.h"
 #include "OnlineSubsystemUtils.h"

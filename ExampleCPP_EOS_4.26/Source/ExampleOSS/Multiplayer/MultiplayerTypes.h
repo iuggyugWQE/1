@@ -1,3 +1,3 @@
-// Copyright 2020 June Rhodes. All Rights Reserved.
+// Copyright June Rhodes. MIT Licensed.
 
 #pragma once

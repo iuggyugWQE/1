@@ -1,3 +1,5 @@
+// Copyright June Rhodes. MIT Licensed.
+
 using UnrealBuildTool;
 using System.Collections.Generic;
 

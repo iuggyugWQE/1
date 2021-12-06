@@ -1,3 +1,5 @@
+// Copyright June Rhodes. MIT Licensed.
+
 #include "ExampleOSSEarlyConfig.h"
 #include "GenericPlatform/GenericPlatformFile.h"
 #include "HAL/FileManager.h"
