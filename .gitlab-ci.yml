@@ -1,0 +1,58 @@
+stages:
+  - Generate
+  - Execute
+
+variables:
+  GIT_CLEAN_FLAGS: none
+
+"Generate":
+  stage: Generate
+  tags:
+    - redpoint-games-windows
+  script: |
+    git submodule update --init BuildScripts
+    if ($LastExitCode -ne 0) { exit $LastExitCode }
+    .\BuildScripts\Lib\Patch_BuildGraph.ps1 -Engine 4.26
+    .\BuildScripts\Generate.ps1 -Engine 4.26 -Distribution "ExampleCPP_EOS_4.26" -GitLabYamlPath .cpp.gitlab-ci.yml -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths
+    .\BuildScripts\Generate.ps1 -Engine 4.26 -Distribution "ExampleBP_EOS_4.26" -GitLabYamlPath .blueprints.gitlab-ci.yml -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths
+  only:
+    refs:
+      - main
+      - merge_requests
+  artifacts:
+    paths:
+      - .cpp.gitlab-ci.yml
+      - .blueprints.gitlab-ci.yml
+  variables:
+    GIT_SUBMODULE_STRATEGY: none
+
+"C++":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .cpp.gitlab-ci.yml
+        job: "Generate"
+  only: 
+    refs:
+      - main
+      - merge_requests
+
+"Blueprints":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .blueprints.gitlab-ci.yml
+        job: "Generate"
+  only: 
+    refs:
+      - main
+      - merge_requests
+
+
+

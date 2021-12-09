@@ -1,0 +1,53 @@
+{
+    "Type": "Project",
+    "Distributions": [
+        {
+            "Name": "ExampleCPP_EOS_4.26",
+            "FolderName": "ExampleCPP_EOS_4.26",
+            "ProjectName": "ExampleCPP_EOS",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/ClonePublicCppSubmodules.ps1",
+                    "RunBefore": [
+                        "Compile"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "ExampleOSSEditor"
+                },
+                "Game": {
+                    "Targets": [ "ExampleOSS" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        },
+        {
+            "Name": "ExampleBP_EOS_4.26",
+            "FolderName": "ExampleBP_EOS_4.26",
+            "ProjectName": "ExampleBP_EOS",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/ClonePublicBlueprintsSubmodules.ps1",
+                    "RunBefore": [
+                        "Compile"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "UE4Editor"
+                },
+                "Game": {
+                    "Targets": [ "UE4Game" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        }
+    ]
+}
