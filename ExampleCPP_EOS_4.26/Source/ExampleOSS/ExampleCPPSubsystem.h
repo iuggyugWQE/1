@@ -324,7 +324,7 @@ public:
     bool GetMemberCount(class UExampleCPPLobbyId *LobbyId, int32 &OutMemberCount);
 
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
-    bool GetMemberUserId(class UExampleCPPLobbyId *LobbyId, const int32 &MemberIndex, FUniqueNetIdRepl &OutMemberId);
+    bool GetMemberUserId(class UExampleCPPLobbyId *LobbyId, const int32 &MemberIndex, FString &OutMemberId);
 
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     class UExampleCPPPartyInvite *ConvertLobbyIdToPartyJoinInfo(class UExampleCPPLobbyId *LobbyId);

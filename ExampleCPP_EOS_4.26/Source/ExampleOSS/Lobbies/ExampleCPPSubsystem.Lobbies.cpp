@@ -338,10 +338,7 @@ bool UExampleCPPSubsystem::GetMemberCount(UExampleCPPLobbyId *LobbyId, int32 &Ou
     return Lobby->GetMemberCount(*Identity->GetUniquePlayerId(0), *OnlineLobbyId, OutMemberCount);
 }
 
-bool UExampleCPPSubsystem::GetMemberUserId(
-    UExampleCPPLobbyId *LobbyId,
-    const int32 &MemberIndex,
-    FUniqueNetIdRepl &OutMemberId)
+bool UExampleCPPSubsystem::GetMemberUserId(UExampleCPPLobbyId *LobbyId, const int32 &MemberIndex, FString &OutMemberId)
 {
     IOnlineSubsystem *Subsystem = Online::GetSubsystem(this->GetWorld());
     check(Subsystem);
@@ -392,7 +389,7 @@ bool UExampleCPPSubsystem::GetMemberUserId(
         return false;
     }
 
-    OutMemberId = MemberId;
+    OutMemberId = MemberId->ToString();
     return bFoundMember;
 }
 
