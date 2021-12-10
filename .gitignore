@@ -5,6 +5,8 @@ Saved/
 enc_temp_folder/
 *.sln
 
+/*.gitlab-ci.yml
+
 /Example*/Build/
 /Example*/DerivedDataCache/
 /Example*/WindowsNoEditor/
