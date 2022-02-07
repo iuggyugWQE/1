@@ -4,6 +4,7 @@ This repository contains all the example projects for all Redpoint Games plugins
 
 - C++ example projects:
   - [Redpoint's EOS Online Subsystem](./EOS_CPlusPlus_4.27/README.md) and the related [Agones example documentation](./EOS_AgonesResources/)
+  - [clang-tidy for Unreal Engine](./ClangTidy_4.27/README.md)
 - Blueprint example projects:
   - [Online Subsystem Blueprints for Redpoint's EOS Online Subsystem](./OSB_RedpointEOS_4.27/README.md)
   - [Online Subsystem Blueprints for Epic's EOS Online Subsystem](./OSB_EpicEOS_4.27/README.md)

@@ -1,21 +1,23 @@
 .vs/
+.idea/
 Binaries/
 Intermediate/
 Saved/
+Plugins/
 enc_temp_folder/
 *.sln
 
 /*.gitlab-ci.yml
 
-/Example*/Build/
-/Example*/DerivedDataCache/
-/Example*/WindowsNoEditor/
-/Example*/PersistentDownloadDir/
-/Example*/CloudCache/
-/Example*/Platforms/*/Build/
-/Example*/Plugins/
-/Example*/Output*/
-/Example*/Output_*/
-/Example*/Plugins/BlueprintGraphScreenshot/
-/ExampleBP_*/Source/
-/ExampleBP_*/.clang-format
+/*_*/Build/
+/*_*/DerivedDataCache/
+/*_*/WindowsNoEditor/
+/*_*/PersistentDownloadDir/
+/*_*/CloudCache/
+/*_*/Platforms/*/Build/
+/*_*/Plugins/
+/*_*/Output*/
+/*_*/Output_*/
+/*_*/Plugins/BlueprintGraphScreenshot/
+/OSB_*/Source/
+/OSB_*/.clang-format

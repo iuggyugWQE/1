@@ -15,18 +15,18 @@ variables:
     .\BuildScripts\Lib\Patch_BuildGraph.ps1 -Engine 4.26
     .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "EOS_CPlusPlus_4.27" -GitLabYamlPath .cpp.gitlab-ci.yml -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/"
     .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "OSB_RedpointEOS_4.27" -GitLabYamlPath .blueprints.gitlab-ci.yml -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/"
+    .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "ClangTidy_4.27" -GitLabYamlPath .clang-tidy.gitlab-ci.yml -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/"
   only:
     refs:
       - main
       - merge_requests
   artifacts:
     paths:
-      - .cpp.gitlab-ci.yml
-      - .blueprints.gitlab-ci.yml
+      - .*.gitlab-ci.yml
   variables:
     GIT_SUBMODULE_STRATEGY: none
 
-"C++":
+"EOS":
   stage: Execute
   needs:
     - "Generate"
@@ -40,7 +40,21 @@ variables:
       - main
       - merge_requests
 
-"Blueprints":
+"Clang Tidy":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .clang-tidy.gitlab-ci.yml
+        job: "Generate"
+  only: 
+    refs:
+      - main
+      - merge_requests
+
+"OSB for Redpoint EOS":
   stage: Execute
   needs:
     - "Generate"
