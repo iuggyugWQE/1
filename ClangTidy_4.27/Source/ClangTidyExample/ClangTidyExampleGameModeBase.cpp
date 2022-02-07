@@ -6,7 +6,8 @@
 
 void ABadDestroyTest::BeginDestroy()
 {
-    // This will warn about a missing call to Super::BeginDestroy().
+    // If you comment out the line below, this will warn about a missing call to Super::BeginDestroy().
+    Super::BeginDestroy();
 }
 
 // This will warn because there's no Super::GetLifetimeReplicatedProps.
