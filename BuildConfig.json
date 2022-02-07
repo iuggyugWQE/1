@@ -72,6 +72,30 @@
                     "Configurations": [ "DebugGame" ]
                 }
             }
+        },
+        {
+            "Name": "GMF_4.27",
+            "FolderName": "GMF_4.27",
+            "ProjectName": "GMFTest",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/GMF_4.27_Clone.ps1",
+                    "RunBefore": [
+                        "Compile"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "UE4Editor"
+                },
+                "Game": {
+                    "Targets": [ "UE4Game" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
         }
     ]
 }
