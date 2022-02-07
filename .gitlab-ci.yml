@@ -22,8 +22,7 @@ variables:
       - merge_requests
   artifacts:
     paths:
-      - .cpp.gitlab-ci.yml
-      - .blueprints.gitlab-ci.yml
+      - .*.gitlab-ci.yml
   variables:
     GIT_SUBMODULE_STRATEGY: none
 
