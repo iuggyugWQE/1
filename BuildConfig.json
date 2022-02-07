@@ -26,6 +26,30 @@
             }
         },
         {
+            "Name": "ClangTidy_4.27",
+            "FolderName": "ClangTidy_4.27",
+            "ProjectName": "ClangTidyExample",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/ClangTidy_4.27_Clone.ps1",
+                    "RunBefore": [
+                        "Compile"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "ClangTidyExampleEditor"
+                },
+                "Game": {
+                    "Targets": [ "ClangTidyExample" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        },
+        {
             "Name": "OSB_RedpointEOS_4.27",
             "FolderName": "OSB_RedpointEOS_4.27",
             "ProjectName": "OSB_RedpointEOS",
