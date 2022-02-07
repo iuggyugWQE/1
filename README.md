@@ -1,18 +1,22 @@
-## EOS Online Subsystem and Online Subsystem Blueprints Example Projects
+# Example Projects for Redpoint Plugins
 
-These example projects demonstrate how to use [the EOS Online Subsystem plugin](https://redpointgames.gitlab.io/eos-online-subsystem/), optionally using [the Online Subsystem Blueprints plugin](https://redpointgames.gitlab.io/online-subsystem-blueprints/) in your Unreal Engine project.
+This repository contains all the example projects for all Redpoint Games plugins. Click through to the README for the particular example you are interested in:
 
-### Available examples
+- C++ example projects:
+  - [Redpoint's EOS Online Subsystem](./EOS_CPlusPlus_4.27/README.md) and the related [Agones example documentation](./EOS_AgonesResources/)
+- Blueprint example projects:
+  - [Online Subsystem Blueprints for Redpoint's EOS Online Subsystem](./OSB_RedpointEOS_4.27/README.md)
+  - [Online Subsystem Blueprints for Epic's EOS Online Subsystem](./OSB_EpicEOS_4.27/README.md)
+  - [Online Subsystem Blueprints for Steam Subsystem](./OSB_Steam_4.27/README.md)
+  - [Online Subsystem Blueprints for Null Subsystem](./OSB_Null_4.27/README.md)
 
-Click through to the README for the particular example you are interested in.
+All the example projects should work on Unreal Engine 5.0, where the underlying plugin also has support for Unreal Engine 5.0. For example projects for Unreal Engine 4.26, see the [Archived](./Archived/) folder. Please note that the Unreal Engine 4.26 examples are no longer maintained.
 
-- [Blueprints Example for Unreal Engine 4.26](./ExampleBP_EOS_4.26/README.md) (requires Online Subsystem Blueprints)
-- [C++ Example for Unreal Engine 4.26](./ExampleCPP_EOS_4.26/README.md)
+## Further documentation
 
-If you would like to deploy the C++ example as a dedicated server running on Kubernetes, refer to [the Agones example documentation](./AgonesResources/).
+For more information on the various example projects, please refer to the relevant documentation:
 
-These examples should also work on Unreal Engine 4.27 and Unreal Engine 5.0.
-
-### Further documentation
-
-For more information on the example project, [refer to the online documentation](https://redpointgames.gitlab.io/eos-online-subsystem/docs/example_project).
+- [EOS Online Subsystem](https://redpointgames.gitlab.io/eos-online-subsystem/docs/example_project)
+- [Online Subsystem Blueprints](https://redpointgames.gitlab.io/online-subsystem-blueprints/docs/example_project)
+- [Game Management Framework](https://redpointgames.gitlab.io/game-management-framework/docs/)
+- [clang-tidy for Unreal Engine](https://redpointgames.gitlab.io/clang-tidy-for-unreal-engine/docs/)

@@ -2,13 +2,13 @@
     "Type": "Project",
     "Distributions": [
         {
-            "Name": "ExampleCPP_EOS_4.26",
-            "FolderName": "ExampleCPP_EOS_4.26",
-            "ProjectName": "ExampleCPP_EOS",
+            "Name": "EOS_CPlusPlus_4.27",
+            "FolderName": "EOS_CPlusPlus_4.27",
+            "ProjectName": "EOS_CPlusPlus",
             "Prepare": [
                 {
                     "Type": "Custom",
-                    "ScriptPath": "BuildScriptsExtra/ClonePublicCppSubmodules.ps1",
+                    "ScriptPath": "BuildScriptsExtra/EOS_CPlusPlus_4.27_Clone.ps1",
                     "RunBefore": [
                         "Compile"
                     ]
@@ -26,13 +26,13 @@
             }
         },
         {
-            "Name": "ExampleBP_EOS_4.26",
-            "FolderName": "ExampleBP_EOS_4.26",
-            "ProjectName": "ExampleBP_EOS",
+            "Name": "OSB_RedpointEOS_4.27",
+            "FolderName": "OSB_RedpointEOS_4.27",
+            "ProjectName": "OSB_RedpointEOS",
             "Prepare": [
                 {
                     "Type": "Custom",
-                    "ScriptPath": "BuildScriptsExtra/ClonePublicBlueprintsSubmodules.ps1",
+                    "ScriptPath": "BuildScriptsExtra/OSB_RedpointEOS_4.27_Clone.ps1",
                     "RunBefore": [
                         "Compile"
                     ]
