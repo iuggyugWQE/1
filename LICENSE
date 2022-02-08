@@ -1,16 +1,12 @@
-=========================== For the EOS Online Subsystem plugin ===========================
-
-The plugin licensing is outlined here: https://redpointgames.gitlab.io/eos-online-subsystem/docs/licensing/.
-
-
-
-=========== For the example project (everything other than the Plugins/ folder) ===========
+============================ IMPORTANT ============================
 
 The MIT license *ONLY APPLIES TO THE EXAMPLE PROJECT FILES*. It does not extend in any way to any of the plugin source code, binaries or other assets.
 
+===================================================================
+
 MIT License
 
-Copyright (c) 2020 Redpoint Games
+Copyright (c) Redpoint Games
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
