@@ -13,10 +13,19 @@ variables:
     git submodule update --init BuildScripts
     if ($LastExitCode -ne 0) { exit $LastExitCode }
     .\BuildScripts\Lib\Patch_BuildGraph.ps1 -Engine 4.27
-    .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "EOS_CPlusPlus" -GitLabYamlPath .cpp.gitlab-ci.yml -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/"
-    .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "OSB_RedpointEOS" -GitLabYamlPath .blueprints.gitlab-ci.yml -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/"
-    .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "ClangTidy" -GitLabYamlPath .clang-tidy.gitlab-ci.yml -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/"
-    .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "GMF" -GitLabYamlPath .gmf.gitlab-ci.yml -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/"
+    $Distributions = @(
+      "ClangTidy",
+      "EOS_CPlusPlus",
+      "GMF",
+      "OSB_EpicEOS",
+      "OSB_LoginUI",
+      "OSB_Null",
+      "OSB_RedpointEOS",
+      "OSB_Steam"
+    )
+    foreach ($Dist in $Distributions) {
+      .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "$Dist" -GitLabYamlPath ".$Dist.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/"
+    }
   only:
     refs:
       - main
@@ -27,42 +36,28 @@ variables:
   variables:
     GIT_SUBMODULE_STRATEGY: none
 
-"EOS":
+"ClangTidy":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .cpp.gitlab-ci.yml
+      - artifact: .ClangTidy.gitlab-ci.yml
         job: "Generate"
   only: 
     refs:
       - main
       - merge_requests
 
-"Clang Tidy":
+"EOS_CPlusPlus":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .clang-tidy.gitlab-ci.yml
-        job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
-
-"OSB for Redpoint EOS":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .blueprints.gitlab-ci.yml
+      - artifact: .EOS_CPlusPlus.gitlab-ci.yml
         job: "Generate"
   only: 
     refs:
@@ -76,14 +71,82 @@ variables:
   trigger:
     strategy: depend
     include:
-      - artifact: .gmf.gitlab-ci.yml
+      - artifact: .GMF.gitlab-ci.yml
         job: "Generate"
   only: 
     refs:
       - main
       - merge_requests
 
+"OSB_EpicEOS":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .OSB_EpicEOS.gitlab-ci.yml
+        job: "Generate"
+  only: 
+    refs:
+      - main
+      - merge_requests
 
+"OSB_LoginUI":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .OSB_LoginUI.gitlab-ci.yml
+        job: "Generate"
+  only: 
+    refs:
+      - main
+      - merge_requests
+
+"OSB_Null":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .OSB_Null.gitlab-ci.yml
+        job: "Generate"
+  only: 
+    refs:
+      - main
+      - merge_requests
+
+"OSB_RedpointEOS":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .OSB_RedpointEOS.gitlab-ci.yml
+        job: "Generate"
+  only: 
+    refs:
+      - main
+      - merge_requests
+
+"OSB_Steam":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .OSB_Steam.gitlab-ci.yml
+        job: "Generate"
+  only: 
+    refs:
+      - main
+      - merge_requests
 
 
 

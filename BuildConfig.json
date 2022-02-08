@@ -2,30 +2,6 @@
     "Type": "Project",
     "Distributions": [
         {
-            "Name": "EOS_CPlusPlus",
-            "FolderName": "EOS_CPlusPlus",
-            "ProjectName": "EOS_CPlusPlus",
-            "Prepare": [
-                {
-                    "Type": "Custom",
-                    "ScriptPath": "BuildScriptsExtra/EOS_CPlusPlus_Clone.ps1",
-                    "RunBefore": [
-                        "Compile"
-                    ]
-                }
-            ],
-            "Build": {
-                "Editor": {
-                    "Target": "ExampleOSSEditor"
-                },
-                "Game": {
-                    "Targets": [ "ExampleOSS" ],
-                    "Platforms": [ "Win64" ],
-                    "Configurations": [ "DebugGame" ]
-                }
-            }
-        },
-        {
             "Name": "ClangTidy",
             "FolderName": "ClangTidy",
             "ProjectName": "ClangTidyExample",
@@ -34,7 +10,7 @@
                     "Type": "Custom",
                     "ScriptPath": "BuildScriptsExtra/ClangTidy_Clone.ps1",
                     "RunBefore": [
-                        "Compile"
+                        "BuildGraph"
                     ]
                 }
             ],
@@ -50,15 +26,39 @@
             }
         },
         {
-            "Name": "OSB_RedpointEOS",
-            "FolderName": "OSB_RedpointEOS",
-            "ProjectName": "OSB_RedpointEOS",
+            "Name": "EOS_CPlusPlus",
+            "FolderName": "EOS_CPlusPlus",
+            "ProjectName": "EOS_CPlusPlus",
             "Prepare": [
                 {
                     "Type": "Custom",
-                    "ScriptPath": "BuildScriptsExtra/OSB_RedpointEOS_Clone.ps1",
+                    "ScriptPath": "BuildScriptsExtra/EOS_CPlusPlus_Clone.ps1",
                     "RunBefore": [
-                        "Compile"
+                        "BuildGraph"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "ExampleOSSEditor"
+                },
+                "Game": {
+                    "Targets": [ "ExampleOSS" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        },
+        {
+            "Name": "GMF",
+            "FolderName": "GMF",
+            "ProjectName": "GMFTest",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/GMF_Clone.ps1",
+                    "RunBefore": [
+                        "BuildGraph"
                     ]
                 }
             ],
@@ -74,15 +74,111 @@
             }
         },
         {
-            "Name": "GMF",
-            "FolderName": "GMF",
-            "ProjectName": "GMFTest",
+            "Name": "OSB_EpicEOS",
+            "FolderName": "OSB_EpicEOS",
+            "ProjectName": "ExampleOSS",
             "Prepare": [
                 {
                     "Type": "Custom",
-                    "ScriptPath": "BuildScriptsExtra/GMF_Clone.ps1",
+                    "ScriptPath": "BuildScriptsExtra/OSB_EpicEOS_Clone.ps1",
                     "RunBefore": [
-                        "Compile"
+                        "BuildGraph"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "UE4Editor"
+                },
+                "Game": {
+                    "Targets": [ "UE4Game" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        },
+        {
+            "Name": "OSB_LoginUI",
+            "FolderName": "OSB_LoginUI",
+            "ProjectName": "OSBDemo",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/OSB_LoginUI_Clone.ps1",
+                    "RunBefore": [
+                        "BuildGraph"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "UE4Editor"
+                },
+                "Game": {
+                    "Targets": [ "UE4Game" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        },
+        {
+            "Name": "OSB_Null",
+            "FolderName": "OSB_Null",
+            "ProjectName": "OSB_Null",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/OSB_Null_Clone.ps1",
+                    "RunBefore": [
+                        "BuildGraph"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "UE4Editor"
+                },
+                "Game": {
+                    "Targets": [ "UE4Game" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        },
+        {
+            "Name": "OSB_RedpointEOS",
+            "FolderName": "OSB_RedpointEOS",
+            "ProjectName": "OSB_RedpointEOS",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/OSB_RedpointEOS_Clone.ps1",
+                    "RunBefore": [
+                        "BuildGraph"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "UE4Editor"
+                },
+                "Game": {
+                    "Targets": [ "UE4Game" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        },
+        {
+            "Name": "OSB_Steam",
+            "FolderName": "OSB_Steam",
+            "ProjectName": "OSB_Steam",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/OSB_Steam_Clone.ps1",
+                    "RunBefore": [
+                        "BuildGraph"
                     ]
                 }
             ],

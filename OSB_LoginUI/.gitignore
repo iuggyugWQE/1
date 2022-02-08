@@ -1,0 +1,18 @@
+# Exclude general folders and IDE temporary files
+DerivedDataCache
+Intermediate/
+Saved/
+Binaries/
+*.VC.db
+*.opensdf
+*.opendb
+*.sdf
+*.sln
+*.suo
+*.xcodeproj
+*.xcworkspace
+.vs/
+*.pdb
+*_BuiltData.uasset
+
+/Plugins/OnlineSubsystemBlueprints/
