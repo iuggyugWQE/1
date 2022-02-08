@@ -2,7 +2,7 @@ param()
 
 . $PSScriptRoot\CloneHelper.ps1
 
-Set-Location $PSScriptRoot\..\ClangTidy_4.27
+Set-Location $PSScriptRoot\..\ClangTidy
 
 Clone-Repository "clang-tidy-for-unreal-engine" "ClangTidy"
 

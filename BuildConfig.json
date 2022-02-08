@@ -2,13 +2,13 @@
     "Type": "Project",
     "Distributions": [
         {
-            "Name": "EOS_CPlusPlus_4.27",
-            "FolderName": "EOS_CPlusPlus_4.27",
+            "Name": "EOS_CPlusPlus",
+            "FolderName": "EOS_CPlusPlus",
             "ProjectName": "EOS_CPlusPlus",
             "Prepare": [
                 {
                     "Type": "Custom",
-                    "ScriptPath": "BuildScriptsExtra/EOS_CPlusPlus_4.27_Clone.ps1",
+                    "ScriptPath": "BuildScriptsExtra/EOS_CPlusPlus_Clone.ps1",
                     "RunBefore": [
                         "Compile"
                     ]
@@ -26,13 +26,13 @@
             }
         },
         {
-            "Name": "ClangTidy_4.27",
-            "FolderName": "ClangTidy_4.27",
+            "Name": "ClangTidy",
+            "FolderName": "ClangTidy",
             "ProjectName": "ClangTidyExample",
             "Prepare": [
                 {
                     "Type": "Custom",
-                    "ScriptPath": "BuildScriptsExtra/ClangTidy_4.27_Clone.ps1",
+                    "ScriptPath": "BuildScriptsExtra/ClangTidy_Clone.ps1",
                     "RunBefore": [
                         "Compile"
                     ]
@@ -50,13 +50,13 @@
             }
         },
         {
-            "Name": "OSB_RedpointEOS_4.27",
-            "FolderName": "OSB_RedpointEOS_4.27",
+            "Name": "OSB_RedpointEOS",
+            "FolderName": "OSB_RedpointEOS",
             "ProjectName": "OSB_RedpointEOS",
             "Prepare": [
                 {
                     "Type": "Custom",
-                    "ScriptPath": "BuildScriptsExtra/OSB_RedpointEOS_4.27_Clone.ps1",
+                    "ScriptPath": "BuildScriptsExtra/OSB_RedpointEOS_Clone.ps1",
                     "RunBefore": [
                         "Compile"
                     ]
@@ -74,13 +74,13 @@
             }
         },
         {
-            "Name": "GMF_4.27",
-            "FolderName": "GMF_4.27",
+            "Name": "GMF",
+            "FolderName": "GMF",
             "ProjectName": "GMFTest",
             "Prepare": [
                 {
                     "Type": "Custom",
-                    "ScriptPath": "BuildScriptsExtra/GMF_4.27_Clone.ps1",
+                    "ScriptPath": "BuildScriptsExtra/GMF_Clone.ps1",
                     "RunBefore": [
                         "Compile"
                     ]

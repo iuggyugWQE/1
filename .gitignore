@@ -9,15 +9,17 @@ enc_temp_folder/
 
 /*.gitlab-ci.yml
 
-/*_*/Build/
-/*_*/DerivedDataCache/
-/*_*/WindowsNoEditor/
-/*_*/PersistentDownloadDir/
-/*_*/CloudCache/
-/*_*/Platforms/*/Build/
-/*_*/Plugins/
-/*_*/Output*/
-/*_*/Output_*/
-/*_*/Plugins/BlueprintGraphScreenshot/
+/*/Build/
+/*/DerivedDataCache/
+/*/WindowsNoEditor/
+/*/PersistentDownloadDir/
+/*/CloudCache/
+/*/Platforms/*/Build/
+/*/Plugins/
+/*/Output*/
+/*/Output_*/
+/*/Plugins/BlueprintGraphScreenshot/
 /OSB_*/Source/
 /OSB_*/.clang-format
+/GMF/Source/
+/GMF/.clang-format
