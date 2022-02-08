@@ -23,5 +23,7 @@ enc_temp_folder/
 /OSB_*/.clang-format
 !/OSB_LoginUI/Source/
 !/OSB_LoginUI/.clang-format
+!/OSB_EpicEOS/Source/
+!/OSB_EpicEOS/.clang-format
 /GMF/Source/
 /GMF/.clang-format

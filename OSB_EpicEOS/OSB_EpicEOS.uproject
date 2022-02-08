@@ -1,6 +1,13 @@
 {
 	"FileVersion": 3,
 	"EngineAssociation": "4.27",
+	"Modules": [
+		{
+			"Name": "OSB_EpicEOS",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	],
 	"Plugins": [
 		{
 			"Name": "OnlineSubsystemEOS",

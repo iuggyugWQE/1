@@ -88,10 +88,10 @@
             ],
             "Build": {
                 "Editor": {
-                    "Target": "UE4Editor"
+                    "Target": "OSB_EpicEOSEditor"
                 },
                 "Game": {
-                    "Targets": [ "UE4Game" ],
+                    "Targets": [ "OSB_EpicEOS" ],
                     "Platforms": [ "Win64" ],
                     "Configurations": [ "DebugGame" ]
                 }
