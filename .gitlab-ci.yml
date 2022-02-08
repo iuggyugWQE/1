@@ -21,7 +21,8 @@ variables:
       "OSB_LoginUI",
       "OSB_Null",
       "OSB_RedpointEOS",
-      "OSB_Steam"
+      "OSB_Steam",
+      "RSI"
     )
     foreach ($Dist in $Distributions) {
       .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "$Dist" -GitLabYamlPath ".$Dist.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/"
@@ -72,6 +73,20 @@ variables:
     strategy: depend
     include:
       - artifact: .GMF.gitlab-ci.yml
+        job: "Generate"
+  only: 
+    refs:
+      - main
+      - merge_requests
+
+"RSI":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .RSI.gitlab-ci.yml
         job: "Generate"
   only: 
     refs:

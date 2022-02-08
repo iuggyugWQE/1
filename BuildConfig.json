@@ -192,6 +192,30 @@
                     "Configurations": [ "DebugGame" ]
                 }
             }
+        },
+        {
+            "Name": "RSI",
+            "FolderName": "RSI",
+            "ProjectName": "RSIDemo",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/RSI_Clone.ps1",
+                    "RunBefore": [
+                        "BuildGraph"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "UE4Editor"
+                },
+                "Game": {
+                    "Targets": [ "UE4Game" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
         }
     ]
 }
