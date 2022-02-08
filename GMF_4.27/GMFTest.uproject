@@ -1,0 +1,11 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.27",
+	"Plugins": [
+		{
+			"Name": "GameManagementFramework",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/631d5ee26def4ec69565285b9889798a"
+		}
+	]
+}
