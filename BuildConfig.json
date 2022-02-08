@@ -76,7 +76,7 @@
         {
             "Name": "OSB_EpicEOS",
             "FolderName": "OSB_EpicEOS",
-            "ProjectName": "ExampleOSS",
+            "ProjectName": "OSB_EpicEOS",
             "Prepare": [
                 {
                     "Type": "Custom",
