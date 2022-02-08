@@ -21,5 +21,7 @@ enc_temp_folder/
 /*/Plugins/BlueprintGraphScreenshot/
 /OSB_*/Source/
 /OSB_*/.clang-format
+!/OSB_LoginUI/Source/
+!/OSB_LoginUI/.clang-format
 /GMF/Source/
 /GMF/.clang-format

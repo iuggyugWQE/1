@@ -112,10 +112,10 @@
             ],
             "Build": {
                 "Editor": {
-                    "Target": "UE4Editor"
+                    "Target": "OSBDemoEditor"
                 },
                 "Game": {
-                    "Targets": [ "UE4Game" ],
+                    "Targets": [ "OSBDemo" ],
                     "Platforms": [ "Win64" ],
                     "Configurations": [ "DebugGame" ]
                 }
