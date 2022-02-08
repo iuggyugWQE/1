@@ -10,6 +10,7 @@ This repository contains all the example projects for all Redpoint Games plugins
   - [Online Subsystem Blueprints for Epic's EOS Online Subsystem](./OSB_EpicEOS/)
   - [Online Subsystem Blueprints for Steam Subsystem](./OSB_Steam/)
   - [Online Subsystem Blueprints for Null Subsystem](./OSB_Null/)
+  - [Online Subsystem Blueprints, authenticating with an external login UI](./OSB_LoginUI/) for subsystems such as Google
   - [Game Management Framework](./GMF/)
 
 All the example projects should work on Unreal Engine 5.0, where the underlying plugin also has support for Unreal Engine 5.0. For example projects for Unreal Engine 4.26, see the [Archived](./Archived/) folder. Please note that the Unreal Engine 4.26 examples are no longer maintained.
