@@ -103,6 +103,7 @@ void UExampleCPPSubsystem::StartCreateSession(
     bool bOverridePorts,
     int32 InGamePort,
     int32 InBeaconPort,
+    int32 Slots,
     FExampleCPPSubsystemCreateSessionComplete OnDone)
 {
     IOnlineSubsystem *Subsystem = Online::GetSubsystem(WorldContextObject->GetWorld());
@@ -122,7 +123,7 @@ void UExampleCPPSubsystem::StartCreateSession(
     }
 
     TSharedRef<FOnlineSessionSettings> SessionSettings = MakeShared<FOnlineSessionSettings>();
-    SessionSettings->NumPublicConnections = 4;
+    SessionSettings->NumPublicConnections = Slots;
     SessionSettings->bShouldAdvertise = true;
     SessionSettings->bUsesPresence = true;
     SessionSettings->Settings.Add(
@@ -248,6 +249,8 @@ void UExampleCPPSubsystem::HandleFindSessionsComplete(
                 auto Result = NewObject<UExampleCPPSessionSearchResult>(this);
                 Result->Result = RawResult;
                 Result->SessionId = RawResult.GetSessionIdStr();
+                Result->OpenSlots = RawResult.Session.NumOpenPublicConnections;
+                Result->TotalSlots = RawResult.Session.SessionSettings.NumPublicConnections;
                 auto DedicatedServerAttr = RawResult.Session.SessionSettings.Settings.Find("IsDedicatedServer");
                 if (DedicatedServerAttr != nullptr)
                 {
