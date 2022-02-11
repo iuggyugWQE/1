@@ -572,6 +572,7 @@ public:
         bool bOverridePorts,
         int32 InGamePort,
         int32 InBeaconPort,
+        int32 Slots,
         FExampleCPPSubsystemCreateSessionComplete OnDone);
 
 private:

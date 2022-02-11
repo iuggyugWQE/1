@@ -33,4 +33,10 @@ public:
 
     UPROPERTY(BlueprintReadonly)
     bool bIsDedicatedServer;
+
+    UPROPERTY(BlueprintReadOnly)
+    int64 OpenSlots;
+
+    UPROPERTY(BlueprintReadOnly)
+    int64 TotalSlots;
 };
