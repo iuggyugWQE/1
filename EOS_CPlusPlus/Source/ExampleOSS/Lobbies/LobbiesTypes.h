@@ -2,7 +2,7 @@
 
 #pragma once
 
-#include "OnlineLobbyInterface.h"
+#include "../Interfaces/OnlineLobbyInterface.h"
 
 #include "LobbiesTypes.generated.h"
 
