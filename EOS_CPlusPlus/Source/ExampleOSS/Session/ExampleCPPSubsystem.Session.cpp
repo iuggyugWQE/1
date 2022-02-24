@@ -553,15 +553,15 @@ void UExampleCPPSubsystem::SendBeaconPingToSearchResult(
 
     // The port name is set to FName(TEXT("12345")) as per the comment in DemoBeacon.cpp.
     // Allow dedicated servers to specify an override for the beacon port as needed.
-    FString BeaconPort = TEXT("12345");
+    FString BeaconPortString = TEXT("12345");
     FString OverrideBeaconPort;
     if (SearchResult->Result.Session.SessionSettings.Get("OverrideBeaconPort", OverrideBeaconPort))
     {
-        BeaconPort = OverrideBeaconPort;
+        BeaconPortString = OverrideBeaconPort;
     }
 
     FString ConnectInfo;
-    if (!Session->GetResolvedConnectString(SearchResult->Result, FName(*BeaconPort), ConnectInfo))
+    if (!Session->GetResolvedConnectString(SearchResult->Result, FName(*BeaconPortString), ConnectInfo))
     {
         OnDone.ExecuteIfBound(false, TEXT("Connect info not found"));
         return;
