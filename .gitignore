@@ -27,3 +27,4 @@ enc_temp_folder/
 !/OSB_EpicEOS/.clang-format
 /GMF/Source/
 /GMF/.clang-format
+/RSI/Content/StarterContent/

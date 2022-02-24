@@ -46,10 +46,11 @@ variables:
     include:
       - artifact: .ClangTidy.gitlab-ci.yml
         job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - ClangTidy/**/*
 
 "EOS_CPlusPlus":
   stage: Execute
@@ -60,10 +61,11 @@ variables:
     include:
       - artifact: .EOS_CPlusPlus.gitlab-ci.yml
         job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - EOS_CPlusPlus/**/*
 
 "GMF":
   stage: Execute
@@ -74,10 +76,11 @@ variables:
     include:
       - artifact: .GMF.gitlab-ci.yml
         job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - GMF/**/*
 
 "RSI":
   stage: Execute
@@ -88,10 +91,11 @@ variables:
     include:
       - artifact: .RSI.gitlab-ci.yml
         job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - RSI/**/*
 
 "OSB_EpicEOS":
   stage: Execute
@@ -102,10 +106,11 @@ variables:
     include:
       - artifact: .OSB_EpicEOS.gitlab-ci.yml
         job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - OSB_EpicEOS/**/*
 
 "OSB_LoginUI":
   stage: Execute
@@ -116,10 +121,11 @@ variables:
     include:
       - artifact: .OSB_LoginUI.gitlab-ci.yml
         job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - OSB_LoginUI/**/*
 
 "OSB_Null":
   stage: Execute
@@ -130,10 +136,11 @@ variables:
     include:
       - artifact: .OSB_Null.gitlab-ci.yml
         job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - OSB_Null/**/*
 
 "OSB_RedpointEOS":
   stage: Execute
@@ -144,10 +151,11 @@ variables:
     include:
       - artifact: .OSB_RedpointEOS.gitlab-ci.yml
         job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - OSB_RedpointEOS/**/*
 
 "OSB_Steam":
   stage: Execute
@@ -158,10 +166,11 @@ variables:
     include:
       - artifact: .OSB_Steam.gitlab-ci.yml
         job: "Generate"
-  only: 
-    refs:
-      - main
-      - merge_requests
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - OSB_Steam/**/*
 
 
 
