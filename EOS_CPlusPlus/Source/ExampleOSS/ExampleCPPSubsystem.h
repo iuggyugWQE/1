@@ -38,8 +38,7 @@
  * This demo project exposes some blueprint nodes so they're accessible from UMG. It's not meant to be an example of how
  * you can access the online subsystem from blueprints.
  *
- * If you're interested in using the online subsystem from blueprints, see the "ExampleBlueprints_EOS_..." project
- * instead.
+ * If you're interested in using the online subsystem from blueprints, see the "OSB_RedpointEOS" project instead.
  */
 
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemLogoutComplete, bool, WasSuccessful);
@@ -51,6 +50,11 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(
     const TArray<FExampleCPPAchievement> &,
     Achievements);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemReadFriendsComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemReadUsersComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FExampleCPPSubsystemFriendsChanged);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemFriendOperationComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemSetFriendAliasComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemDeleteFriendAliasComplete, bool, WasSuccessful);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemInviteFriendComplete, bool, WasSuccessful);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FExampleCPPSubsystemInvitationsChanged);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemUpdatePresenceComplete, bool, WasSuccessful);
@@ -261,6 +265,13 @@ private:
 
     /********** ExampleCPPSubsystem.Friends.cpp **********/
 
+private:
+    void OnFriendsChange();
+
+public:
+    UPROPERTY(BlueprintAssignable)
+    FExampleCPPSubsystemFriendsChanged OnFriendsChanged;
+
 public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     TArray<UExampleCPPFriend *> GetFriends(const UObject *WorldContextObject);
@@ -276,6 +287,187 @@ private:
         const FString &ErrorStr,
         const UObject *WorldContextObject,
         FExampleCPPSubsystemReadFriendsComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    TArray<FExampleCPPSimpleUser> GetBlockedUsers(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartReadBlockedUsers(const UObject *WorldContextObject, FExampleCPPSubsystemReadUsersComplete OnDone);
+
+private:
+    FDelegateHandle QueryBlockedPlayersHandle;
+    void HandleReadBlockedUsersComplete(
+        const FUniqueNetId &UserId,
+        bool bWasSuccessful,
+        const FString &Error,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemReadUsersComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    TArray<FExampleCPPSimpleUser> GetRecentPlayers(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartReadRecentPlayers(const UObject *WorldContextObject, FExampleCPPSubsystemReadUsersComplete OnDone);
+
+private:
+    FDelegateHandle QueryRecentPlayersHandle;
+    void HandleReadRecentPlayersComplete(
+        const FUniqueNetId &UserId,
+        const FString &Namespace,
+        bool bWasSuccessful,
+        const FString &Error,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemReadUsersComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void AcceptFriendInvite(
+        const UObject *WorldContextObject,
+        const FString &TargetUserId,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+private:
+    void HandleAcceptFriendInviteComplete(
+        int32 LocalUserNum,
+        bool bWasSuccessful,
+        const FUniqueNetId &FriendId,
+        const FString &ListName,
+        const FString &ErrorStr,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void BlockPlayer(
+        const UObject *WorldContextObject,
+        const FString &TargetUserId,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+private:
+    FDelegateHandle BlockPlayerCompleteHandle;
+    void HandleBlockPlayerComplete(
+        int32 LocalUserNum,
+        bool bWasSuccessful,
+        const FUniqueNetId &UniqueID,
+        const FString &ListName,
+        const FString &ErrorStr,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void DeleteFriend(
+        const UObject *WorldContextObject,
+        const FString &TargetUserId,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+private:
+    FDelegateHandle DeleteFriendCompleteHandle;
+    void HandleDeleteFriendComplete(
+        int32 LocalUserNum,
+        bool bWasSuccessful,
+        const FUniqueNetId &FriendId,
+        const FString &ListName,
+        const FString &ErrorStr,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void RejectFriendInvite(
+        const UObject *WorldContextObject,
+        const FString &TargetUserId,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+private:
+    FDelegateHandle RejectFriendInviteCompleteHandle;
+    void HandleRejectFriendInvite(
+        int32 LocalUserNum,
+        bool bWasSuccessful,
+        const FUniqueNetId &FriendId,
+        const FString &ListName,
+        const FString &ErrorStr,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void SendFriendInvite(
+        const UObject *WorldContextObject,
+        const FString &TargetUserId,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+private:
+    void HandleSendFriendInviteComplete(
+        int32 LocalUserNum,
+        bool bWasSuccessful,
+        const FUniqueNetId &FriendId,
+        const FString &ListName,
+        const FString &ErrorStr,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void UnblockPlayer(
+        const UObject *WorldContextObject,
+        const FString &TargetUserId,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+private:
+    FDelegateHandle UnblockPlayerCompleteHandle;
+    void HandleUnblockPlayerComplete(
+        int32 LocalUserNum,
+        bool bWasSuccessful,
+        const FUniqueNetId &UniqueID,
+        const FString &ListName,
+        const FString &ErrorStr,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemFriendOperationComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartSetFriendAlias(
+        const UObject *WorldContextObject,
+        FUniqueNetIdRepl UserId,
+        const FString &Alias,
+        FExampleCPPSubsystemSetFriendAliasComplete OnDone);
+
+private:
+    void HandleSetFriendAliasComplete(
+        int32 LocalUserNum,
+        const FUniqueNetId &FriendId,
+        const FString &ListName,
+        const FOnlineError &Error,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemSetFriendAliasComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartDeleteFriendAlias(
+        const UObject *WorldContextObject,
+        FUniqueNetIdRepl UserId,
+        FExampleCPPSubsystemDeleteFriendAliasComplete OnDone);
+
+private:
+    void HandleDeleteFriendAliasComplete(
+        int32 LocalUserNum,
+        const FUniqueNetId &FriendId,
+        const FString &ListName,
+        const FOnlineError &Error,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemDeleteFriendAliasComplete OnDone);
+
+    /********** ExampleCPPSubsystem.ExternalUI.cpp **********/
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void ShowFriendsUI(const UObject *WorldContextObject);
+
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void ShowInviteUI(const UObject *WorldContextObject, FName SessionName);
 
     /********** ExampleCPPSubsystem.Leaderboards.cpp **********/
 
@@ -575,6 +767,9 @@ public:
         int32 Slots,
         FExampleCPPSubsystemCreateSessionComplete OnDone);
 
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    bool InviteFriendToSession(const UObject *WorldContextObject, FName SessionName, FUniqueNetIdRepl FriendId);
+
 private:
     FDelegateHandle CreateSessionDelegateHandle;
     void HandleCreateSessionComplete(
@@ -747,10 +942,6 @@ public:
     /********** ExampleCPPSubsystem.VoiceChat.cpp **********/
 
 public:
-    /* Creates a voice chat user. Sets the PrimaryVoiceUser if it's not already set. */
-    UFUNCTION(BlueprintCallable, Category = "Voice")
-    void CreateVoiceChatUser();
-
     UFUNCTION(BlueprintCallable, Category = "Voice")
     void LoginToVoice(class AVoiceChatServices *VoiceChatService, FExampleCPPSubsystemOnVoiceChatLoginComplete OnDone);
 
@@ -773,8 +964,6 @@ public:
 
     UFUNCTION(BlueprintCallable, Category = "Voice")
     bool IsConnecting();
-
-    class IVoiceChatUser *PrimaryVoiceUser;
 
 private:
     void HandleVoiceChatLoginComplete(
@@ -800,7 +989,6 @@ public:
     void QueryUserInfo(
         const UObject *WorldContextObject,
         FString ProductUserIdInput,
-        FString EpicAccountIdInput,
         FExampleCPPSubsystemQueryUserInfoComplete OnDone);
 
 private:

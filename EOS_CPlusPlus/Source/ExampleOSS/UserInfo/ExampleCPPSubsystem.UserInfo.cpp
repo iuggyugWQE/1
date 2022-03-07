@@ -14,7 +14,6 @@
 void UExampleCPPSubsystem::QueryUserInfo(
     const UObject *WorldContextObject,
     FString ProductUserIdInput,
-    FString EpicAccountIdInput,
     FExampleCPPSubsystemQueryUserInfoComplete OnDone)
 {
     IOnlineSubsystem *Subsystem = Online::GetSubsystem(WorldContextObject->GetWorld());
@@ -26,11 +25,10 @@ void UExampleCPPSubsystem::QueryUserInfo(
     IOnlineIdentityPtr Identity = Subsystem->GetIdentityInterface();
     IOnlineUserPtr User = Subsystem->GetUserInterface();
 
-    TSharedPtr<const FUniqueNetId> UniqueNetId =
-        Identity->CreateUniquePlayerId(FString::Printf(TEXT("%s|%s"), *ProductUserIdInput, *EpicAccountIdInput));
+    TSharedPtr<const FUniqueNetId> UniqueNetId = Identity->CreateUniquePlayerId(ProductUserIdInput);
     if (UniqueNetId == nullptr)
     {
-        OnDone.ExecuteIfBound(TEXT("The IDs you entered were invalid."));
+        OnDone.ExecuteIfBound(TEXT("The ID you entered was invalid."));
         return;
     }
 

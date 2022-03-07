@@ -160,12 +160,12 @@ void UEOSGauntletRunDedicatedServerTestController::HandleCreateSessionComplete(F
         }
 
         UE_LOG(LogEOSGauntlet, GauntletLogLevel, TEXT("Scheduling map change every twenty seconds..."));
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UEOSGauntletRunDedicatedServerTestController::OnSeamlessServerTravel),
             20.0f);
 
         UE_LOG(LogEOSGauntlet, GauntletLogLevel, TEXT("Scheduling two minute run time for dedicated server..."));
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UEOSGauntletRunDedicatedServerTestController::OnTestTimeRunOut),
             120.0f);
     }

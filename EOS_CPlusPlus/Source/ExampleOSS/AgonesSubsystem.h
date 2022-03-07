@@ -5,8 +5,17 @@
 #include "CoreMinimal.h"
 #include "HttpModule.h"
 #include "Subsystems/GameInstanceSubsystem.h"
+#include "Containers/Ticker.h"
 
 #include "AgonesSubsystem.generated.h"
+
+#if defined(UE_5_0_OR_LATER)
+typedef FTSTicker FUTicker;
+typedef FTSTicker::FDelegateHandle FUTickerDelegateHandle;
+#else
+typedef FTicker FUTicker;
+typedef FDelegateHandle FUTickerDelegateHandle;
+#endif // #if defined(UE_5_0_OR_LATER)
 
 DECLARE_DYNAMIC_DELEGATE_ThreeParams(
     FAgonesPortsCallback,
@@ -24,7 +33,7 @@ class EXAMPLEOSS_API UAgonesSubsystem : public UGameInstanceSubsystem
 
     bool bHasSentReady = false;
     FString AgonesHttpPort;
-    FDelegateHandle HealthCheckTimer;
+    FUTickerDelegateHandle HealthCheckTimer;
 
 private:
     void HandleHealthCheck(FHttpRequestPtr HttpRequest, const FHttpResponsePtr HttpResponse, const bool bSucceeded);

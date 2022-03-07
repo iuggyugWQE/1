@@ -8,6 +8,7 @@
 #include "GameFramework/GameModeBase.h"
 #include "GameFramework/PlayerController.h"
 #include "Interfaces/OnlinePresenceInterface.h"
+#include "Interfaces/OnlineFriendsInterface.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSubsystemUtils.h"
 
@@ -29,6 +30,7 @@ void UExampleCPPSubsystem::PostInitProperties()
         IOnlinePartyPtr Party = Subsystem->GetPartyInterface();
         IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
         IOnlinePresencePtr Presence = Subsystem->GetPresenceInterface();
+        IOnlineFriendsPtr Friends = Subsystem->GetFriendsInterface();
         if (Party.IsValid())
         {
             Party->AddOnPartyInvitesChangedDelegate_Handle(
@@ -45,6 +47,11 @@ void UExampleCPPSubsystem::PostInitProperties()
         {
             Presence->AddOnPresenceReceivedDelegate_Handle(
                 FOnPresenceReceivedDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnPresenceReceived));
+        }
+        if (Friends.IsValid())
+        {
+            Friends->AddOnFriendsChangeDelegate_Handle(0, 
+                FOnFriendsChangeDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnFriendsChange));
         }
     }
 }
