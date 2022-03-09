@@ -3,6 +3,7 @@
 #include "VoiceChatServices.h"
 #include "ExampleOSS/ExampleCPPSubsystem.h"
 #include "VoiceChat.h"
+#include "OnlineSubsystemUtils.h"
 
 AVoiceChatServices::AVoiceChatServices()
 {
@@ -12,20 +13,13 @@ void AVoiceChatServices::BeginPlay()
 {
     Super::BeginPlay();
 
-    IVoiceChatUser *VoiceUser = CreateUser();
-    if (VoiceUser == nullptr)
+    IVoiceChat *VoiceChat = IVoiceChat::Get();
+    if (VoiceChat == nullptr)
     {
-        VoiceChatUser = VoiceUser;
+        return;
     }
-    else
-    {
-        UExampleCPPSubsystem *CPPSubsystem =
-            GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
-        if (CPPSubsystem)
-        {
-            VoiceChatUser = CPPSubsystem->PrimaryVoiceUser;
-        }
-    }
+
+    this->VoiceChatUser = VoiceChat->CreateUser();
 
     SetupVoiceDelegates();
 }
@@ -62,19 +56,6 @@ void AVoiceChatServices::SetupVoiceDelegates()
     VoiceChatUser->OnVoiceChatPlayerTalkingUpdated().AddUObject(
         this,
         &AVoiceChatServices::HandleVoiceChatPlayerTalkingUpdated);
-}
-
-IVoiceChatUser *AVoiceChatServices::CreateUser()
-{
-    UExampleCPPSubsystem *CPPSubsystem =
-        GetGameInstance() ? GetGameInstance()->GetSubsystem<UExampleCPPSubsystem>() : nullptr;
-    if (CPPSubsystem == nullptr)
-    {
-        return nullptr;
-    }
-
-    CPPSubsystem->CreateVoiceChatUser();
-    return CPPSubsystem->PrimaryVoiceUser;
 }
 
 IVoiceChatUser *AVoiceChatServices::GetVoiceChatUser()

@@ -2,7 +2,6 @@
 
 #include "AgonesSubsystem.h"
 
-#include "Containers/Ticker.h"
 #include "CoreMinimal.h"
 #include "Dom/JsonObject.h"
 #include "Dom/JsonValue.h"
@@ -26,7 +25,7 @@ void UAgonesSubsystem::Initialize(FSubsystemCollectionBase &Collection)
 
     this->bHasSentReady = false;
 
-    this->HealthCheckTimer = FTicker::GetCoreTicker().AddTicker(
+    this->HealthCheckTimer = FUTicker::GetCoreTicker().AddTicker(
         FTickerDelegate::CreateUObject(this, &UAgonesSubsystem::SendHealthCheck),
         1.0f);
 }
@@ -35,7 +34,7 @@ void UAgonesSubsystem::Deinitialize()
 {
     if (this->HealthCheckTimer.IsValid())
     {
-        FTicker::GetCoreTicker().RemoveTicker(this->HealthCheckTimer);
+        FUTicker::GetCoreTicker().RemoveTicker(this->HealthCheckTimer);
     }
 }
 
@@ -80,7 +79,7 @@ bool UAgonesSubsystem::SendHealthCheck(float DeltaSeconds)
     Request->OnProcessRequestComplete().BindUObject(this, &UAgonesSubsystem::HandleHealthCheck);
     Request->ProcessRequest();
 
-    this->HealthCheckTimer = FTicker::GetCoreTicker().AddTicker(
+    this->HealthCheckTimer = FUTicker::GetCoreTicker().AddTicker(
         FTickerDelegate::CreateUObject(this, &UAgonesSubsystem::SendHealthCheck),
         1.0f);
 
@@ -157,7 +156,7 @@ void UAgonesSubsystem::HandleGameServer(
     if (!bSucceeded)
     {
         UE_LOG(LogAgones, Verbose, TEXT("Unable to get game server ports from Agones, retrying"));
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UAgonesSubsystem::RetryGetGamePorts, Callback),
             5.0f);
         return;
@@ -170,7 +169,7 @@ void UAgonesSubsystem::HandleGameServer(
             Verbose,
             TEXT("Unable to get game server ports from Agones, error code %d, retrying"),
             HttpResponse->GetResponseCode());
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UAgonesSubsystem::RetryGetGamePorts, Callback),
             5.0f);
         return;
@@ -186,7 +185,7 @@ void UAgonesSubsystem::HandleGameServer(
             Verbose,
             TEXT("Unable to get game server ports from Agones, invalid JSON, retrying"),
             HttpResponse->GetResponseCode());
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UAgonesSubsystem::RetryGetGamePorts, Callback),
             5.0f);
         return;
@@ -196,7 +195,7 @@ void UAgonesSubsystem::HandleGameServer(
     if (!StatusObj.IsValid() || StatusObj->GetStringField("state") != TEXT("Ready") || !StatusObj->HasField("ports"))
     {
         UE_LOG(LogAgones, Verbose, TEXT("Game server is not ready yet, retrying"), HttpResponse->GetResponseCode());
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UAgonesSubsystem::RetryGetGamePorts, Callback),
             5.0f);
         return;

@@ -63,8 +63,6 @@ public:
 
     void SetupVoiceDelegates();
 
-    class IVoiceChatUser *CreateUser();
-
     IVoiceChatUser *GetVoiceChatUser();
 
     // ~ begin VoiceChat interactions

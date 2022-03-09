@@ -134,40 +134,13 @@ void FVoiceChatResultCPP::ConvertVoiceChatResultToBlueprintableResult(
     }
 }
 
-void UExampleCPPSubsystem::CreateVoiceChatUser()
-{
-    IOnlineSubsystem *Subsystem = Online::GetSubsystem(GetWorld());
-    if (Subsystem == nullptr)
-    {
-        return;
-    }
-
-    IVoiceChat *VoiceChat = IVoiceChat::Get();
-    if (VoiceChat == nullptr)
-    {
-        return;
-    }
-
-    IVoiceChatUser *VoiceChatUser = VoiceChat->CreateUser();
-    if (VoiceChatUser == nullptr)
-    {
-        // Add logging here for handling
-        return;
-    }
-
-    if (PrimaryVoiceUser == nullptr)
-    {
-        PrimaryVoiceUser = VoiceChatUser;
-    }
-}
-
 void UExampleCPPSubsystem::LoginToVoice(
     AVoiceChatServices *VoiceChatService,
     FExampleCPPSubsystemOnVoiceChatLoginComplete OnDone)
 {
     FVoiceChatResultCPP VoiceChatResult;
 
-    if (VoiceChatService == nullptr)
+    if (!IsValid(VoiceChatService))
     {
         VoiceChatResult.bWasSuccessful = false;
         VoiceChatResult.VoiceChatResult = EVoiceChatResultCPP::ImplementationError;
@@ -413,11 +386,6 @@ void UExampleCPPSubsystem::HandleVoiceChatLogoutComplete(
     AVoiceChatServices *VoiceChatService,
     FExampleCPPSubsystemOnVoiceChatLogoutComplete OnDone)
 {
-    if (PrimaryVoiceUser == VoiceChatService->GetVoiceChatUser())
-    {
-        PrimaryVoiceUser = nullptr;
-    }
-
     VoiceChatService->Destroy();
     const FVoiceChatResultCPP VoiceChatResult = FVoiceChatResultCPP(Result);
     OnDone.ExecuteIfBound(PlayerName, VoiceChatResult);

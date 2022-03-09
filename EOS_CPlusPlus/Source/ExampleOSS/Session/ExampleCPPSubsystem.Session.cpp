@@ -599,3 +599,18 @@ FString UExampleCPPSubsystem::GetResolvedConnectStringForSession(const UObject *
 
     return TEXT("");
 }
+
+bool UExampleCPPSubsystem::InviteFriendToSession(
+    const UObject *WorldContextObject,
+    FName SessionName,
+    FUniqueNetIdRepl FriendId)
+{
+    IOnlineSubsystem *Subsystem = Online::GetSubsystem(WorldContextObject->GetWorld());
+    if (Subsystem == nullptr)
+    {
+        return false;
+    }
+    IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+
+    return Session->SendSessionInviteToFriend(0, SessionName, *FriendId.GetUniqueNetId());
+}

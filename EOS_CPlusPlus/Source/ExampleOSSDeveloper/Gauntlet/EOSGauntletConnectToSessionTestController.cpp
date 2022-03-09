@@ -290,7 +290,7 @@ void UEOSGauntletConnectToSessionTestController::OnTick(float TimeDelta)
             TEXT("Connected to server, scheduling disconnect in %fs."),
             SecondsUntilDisconnect);
 
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UEOSGauntletConnectToSessionTestController::DisconnectFromServer),
             SecondsUntilDisconnect);
     }
@@ -301,7 +301,7 @@ void UEOSGauntletConnectToSessionTestController::OnTick(float TimeDelta)
 
         UE_LOG(LogEOSGauntlet, GauntletLogLevel, TEXT("Disconnected from server, scheduling reconnect in 100ms."));
 
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UEOSGauntletConnectToSessionTestController::ReconnectToServer),
             0.1f);
     }

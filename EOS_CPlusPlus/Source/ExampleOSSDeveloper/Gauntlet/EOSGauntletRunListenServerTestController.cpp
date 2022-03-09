@@ -216,12 +216,12 @@ void UEOSGauntletRunListenServerTestController::HandleCreateSessionComplete(FNam
         }
 
         UE_LOG(LogEOSGauntlet, GauntletLogLevel, TEXT("Scheduling map change every twenty seconds..."));
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UEOSGauntletRunListenServerTestController::OnSeamlessServerTravel),
             20.0f);
 
         UE_LOG(LogEOSGauntlet, GauntletLogLevel, TEXT("Scheduling two minute run time for listen server..."));
-        FTicker::GetCoreTicker().AddTicker(
+        FUTicker::GetCoreTicker().AddTicker(
             FTickerDelegate::CreateUObject(this, &UEOSGauntletRunListenServerTestController::OnTestTimeRunOut),
             120.0f);
     }
