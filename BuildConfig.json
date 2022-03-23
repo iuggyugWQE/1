@@ -112,10 +112,10 @@
             ],
             "Build": {
                 "Editor": {
-                    "Target": "UE4Editor"
+                    "Target": "MM_SimpleCPPEditor"
                 },
                 "Game": {
-                    "Targets": [ "UE4Game" ],
+                    "Targets": [ "MM_SimpleCPP" ],
                     "Platforms": [ "Win64" ],
                     "Configurations": [ "DebugGame" ]
                 }
