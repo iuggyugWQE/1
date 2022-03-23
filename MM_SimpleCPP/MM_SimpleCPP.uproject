@@ -1,0 +1,26 @@
+{
+	"FileVersion": 3,
+	"EngineAssociation": "4.27",
+	"Plugins": [
+		{
+			"Name": "Matchmaking",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/c01b5f98383d4b5895f6ec96123565c7"
+		},
+		{
+			"Name": "OnlineSubsystemRedpointEOS",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/product/2c92594ce5aa416c8bfbd79275389e3b"
+		}
+	],
+	"Modules": [
+		{
+			"Name": "MM_SimpleCPP",
+			"Type": "Runtime",
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine"
+			]
+		}
+	]
+}

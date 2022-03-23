@@ -17,6 +17,8 @@ variables:
       "ClangTidy",
       "EOS_CPlusPlus",
       "GMF",
+      "MM_SimpleBP",
+      "MM_SimpleCPP",
       "OSB_EpicEOS",
       "OSB_LoginUI",
       "OSB_Null",
@@ -81,6 +83,36 @@ variables:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - GMF/**/*
+
+"MM_SimpleBP":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .MM_SimpleBP.gitlab-ci.yml
+        job: "Generate"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - MM_SimpleBP/**/*
+
+"MM_SimpleCPP":
+  stage: Execute
+  needs:
+    - "Generate"
+  trigger:
+    strategy: depend
+    include:
+      - artifact: .MM_SimpleCPP.gitlab-ci.yml
+        job: "Generate"
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+      changes:
+        - MM_SimpleCPP/**/*
 
 "RSI":
   stage: Execute
