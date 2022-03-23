@@ -74,6 +74,54 @@
             }
         },
         {
+            "Name": "MM_SimpleBP",
+            "FolderName": "MM_SimpleBP",
+            "ProjectName": "MM_SimpleBP",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/MM_SimpleBP_Clone.ps1",
+                    "RunBefore": [
+                        "BuildGraph"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "UE4Editor"
+                },
+                "Game": {
+                    "Targets": [ "UE4Game" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        },
+        {
+            "Name": "MM_SimpleCPP",
+            "FolderName": "MM_SimpleCPP",
+            "ProjectName": "MM_SimpleCPP",
+            "Prepare": [
+                {
+                    "Type": "Custom",
+                    "ScriptPath": "BuildScriptsExtra/MM_SimpleCPP_Clone.ps1",
+                    "RunBefore": [
+                        "BuildGraph"
+                    ]
+                }
+            ],
+            "Build": {
+                "Editor": {
+                    "Target": "UE4Editor"
+                },
+                "Game": {
+                    "Targets": [ "UE4Game" ],
+                    "Platforms": [ "Win64" ],
+                    "Configurations": [ "DebugGame" ]
+                }
+            }
+        },
+        {
             "Name": "OSB_EpicEOS",
             "FolderName": "OSB_EpicEOS",
             "ProjectName": "OSB_EpicEOS",
