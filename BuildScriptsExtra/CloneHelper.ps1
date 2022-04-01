@@ -1,6 +1,6 @@
 param()
 
-function Clone-Repository($ProjectName, $FolderName) {
+function Clone-Repository($ProjectName, $FolderName, $CommitOverridePrefix) {
     if (!(Test-Path .\Plugins)) {
         New-Item -ItemType Directory .\Plugins
     }
@@ -41,17 +41,25 @@ function Clone-Repository($ProjectName, $FolderName) {
                 exit $LastExitCode
             }
         }
-        $LatestTag = (git --git-dir=$FolderName/.git --work-tree=$FolderName tag -l --sort=-refname | Out-String).Split("`n")[0].Trim()
-        if ($LastExitCode -ne 0) {
-            Write-Host "git tag -l failed with exit code $LastExitCode"
-            exit $LastExitCode
-        }
-        if ($LatestTag -eq "" -or $null -eq $LatestTag) {
-            $LatestTag = "main"
+        $CheckoutTarget = ""
+        $CommitOverride = (Get-Item env:COMMIT_$CommitOverridePrefix -ErrorAction SilentlyContinue)
+        if ($null -ne $CommitOverride) {
+            $CheckoutTarget = $CommitOverride.Value
+            Write-Host "using overridden plugin commit hash of: $CheckoutTarget"
         } else {
-            $LatestTag = "tags/$LatestTag"
+            $LatestTag = (git --git-dir=$FolderName/.git --work-tree=$FolderName tag -l --sort=-refname | Out-String).Split("`n")[0].Trim()
+            if ($LastExitCode -ne 0) {
+                Write-Host "git tag -l failed with exit code $LastExitCode"
+                exit $LastExitCode
+            }
+            if ($LatestTag -eq "" -or $null -eq $LatestTag) {
+                $LatestTag = "main"
+            } else {
+                $LatestTag = "tags/$LatestTag"
+            }
+            $CheckoutTarget = $LatestTag
         }
-        git --git-dir=$FolderName/.git --work-tree=$FolderName checkout $LatestTag
+        git --git-dir=$FolderName/.git --work-tree=$FolderName checkout $CheckoutTarget
         if ($LastExitCode -ne 0) {
             Write-Host "git checkout failed with exit code $LastExitCode"
             exit $LastExitCode
