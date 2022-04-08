@@ -28,7 +28,7 @@
         {
             "Name": "EOS_CPlusPlus",
             "FolderName": "EOS_CPlusPlus",
-            "ProjectName": "EOS_CPlusPlus",
+            "ProjectName": "ExampleOSS",
             "Prepare": [
                 {
                     "Type": "Custom",
@@ -47,7 +47,29 @@
                     "Platforms": [ "Win64" ],
                     "Configurations": [ "DebugGame" ]
                 }
-            }
+            },
+            "Tests": [
+                {
+                    "Name": "P2P Networking",
+                    "Type": "Gauntlet",
+                    "Requires": [
+                        {
+                            "Type": "Game",
+                            "Target": "ExampleOSS",
+                            "Platforms": [
+                                "Win64"
+                            ],
+                            "Configuration": "DebugGame"
+                        }
+                    ],
+                    "Gauntlet": {
+                        "ScriptPath": "BuildScriptsExtra/EOS_CPlusPlus_GauntletTest.cs",
+                        "DeviceListPath": "BuildScriptsExtra/EOS_CPlusPlus_DeviceList.json",
+                        "TestName": "EOSGauntletP2PNetworkingTest",
+                        "Configuration": "DebugGame"
+                    }
+                }
+            ]
         },
         {
             "Name": "GMF",

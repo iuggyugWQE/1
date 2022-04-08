@@ -3,6 +3,7 @@
 #pragma once
 
 #include "../Interfaces/OnlineLobbyInterface.h"
+#include "GameFramework/OnlineReplStructs.h"
 
 #include "LobbiesTypes.generated.h"
 
