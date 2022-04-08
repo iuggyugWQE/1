@@ -24,11 +24,16 @@ variables:
       "OSB_LoginUI",
       "OSB_Null",
       "OSB_RedpointEOS",
-      "OSB_Steam",
+      "OSB_Steam"
+    )
+    $Distributions_UE5 = @(
       "RSI"
     )
     foreach ($Dist in $Distributions) {
       .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "$Dist" -GitLabYamlPath ".$Dist-4.27.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/" -ExecuteTests
+      .\BuildScripts\Generate.ps1 -Engine 5.0 -Distribution "$Dist" -GitLabYamlPath ".$Dist-5.0.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/" -ExecuteTests
+    }
+    foreach ($Dist in $Distributions_UE5) {
       .\BuildScripts\Generate.ps1 -Engine 5.0 -Distribution "$Dist" -GitLabYamlPath ".$Dist-5.0.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/" -ExecuteTests
     }
   rules:
@@ -227,25 +232,6 @@ variables:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - MM_SimpleCPP/**/*
-
-"RSI 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .RSI-4.27.gitlab-ci.yml
-        job: "Generate"
-  variables: 
-    UBT_CLANG_TIDY_EXTENSIONS: "false"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "RSI"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - RSI/**/*
 
 "RSI 5.0":
   stage: Execute
