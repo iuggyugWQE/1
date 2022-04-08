@@ -74,7 +74,7 @@ bool UAgonesSubsystem::SendHealthCheck(float DeltaSeconds)
     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
     Request->SetHeader(TEXT("User-Agent"), TEXT("X-UnrealEngine-Agent"));
     Request->SetHeader(TEXT("Accepts"), TEXT("application/json"));
-    Request->SetContentAsString("");
+    Request->SetContentAsString("{}");
 
     Request->OnProcessRequestComplete().BindUObject(this, &UAgonesSubsystem::HandleHealthCheck);
     Request->ProcessRequest();
@@ -95,7 +95,7 @@ void UAgonesSubsystem::SendReady()
     Request->SetHeader(TEXT("Content-Type"), TEXT("application/json"));
     Request->SetHeader(TEXT("User-Agent"), TEXT("X-UnrealEngine-Agent"));
     Request->SetHeader(TEXT("Accepts"), TEXT("application/json"));
-    Request->SetContentAsString("");
+    Request->SetContentAsString("{}");
 
     Request->OnProcessRequestComplete().BindUObject(this, &UAgonesSubsystem::HandleReady);
     Request->ProcessRequest();
