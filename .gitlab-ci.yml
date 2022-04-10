@@ -38,6 +38,7 @@ variables:
     }
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline"'
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -58,6 +59,7 @@ variables:
         job: "Generate"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "ClangTidy"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -75,6 +77,7 @@ variables:
         job: "Generate"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "ClangTidy"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -94,6 +97,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "EOS"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -113,6 +117,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "EOS"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -132,6 +137,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "GMF"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -151,6 +157,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "MM"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -170,6 +177,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "MM"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -189,6 +197,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "MM"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -208,6 +217,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "MM"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -227,6 +237,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "RSI"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -246,6 +257,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -265,6 +277,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -284,6 +297,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -303,6 +317,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -322,6 +337,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -341,6 +357,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -360,6 +377,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "EOS"'
@@ -380,6 +398,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "EOS"'
@@ -400,6 +419,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
@@ -419,6 +439,7 @@ variables:
     UBT_CLANG_TIDY_EXTENSIONS: "false"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
