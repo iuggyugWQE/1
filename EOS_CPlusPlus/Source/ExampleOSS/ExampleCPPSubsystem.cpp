@@ -55,3 +55,8 @@ void UExampleCPPSubsystem::PostInitProperties()
         }
     }
 }
+
+FString UExampleCPPSubsystem::UniqueNetIdToString(const FUniqueNetIdRepl& UniqueNetId)
+{
+    return UniqueNetId.ToString();
+}
