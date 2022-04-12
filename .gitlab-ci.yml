@@ -16,17 +16,17 @@ variables:
     .\BuildScripts\Lib\Patch_BuildGraph.ps1 -Engine 5.0
     $Distributions = @(
       "ClangTidy",
-      "EOS_CPlusPlus",
       "MM_SimpleBP",
-      "MM_SimpleCPP",
+      "MM_SimpleCPP"
+    )
+    $Distributions_UE5 = @(
+      "EOS_CPlusPlus",
+      "GMF",
       "OSB_EpicEOS",
       "OSB_LoginUI",
       "OSB_Null",
       "OSB_RedpointEOS",
-      "OSB_Steam"
-    )
-    $Distributions_UE5 = @(
-      "GMF",
+      "OSB_Steam",
       "RSI"
     )
     foreach ($Dist in $Distributions) {
@@ -83,26 +83,6 @@ variables:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - ClangTidy/**/*
-
-"EOS_CPlusPlus 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .EOS_CPlusPlus-4.27.gitlab-ci.yml
-        job: "Generate"
-  variables: 
-    UBT_CLANG_TIDY_EXTENSIONS: "false"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "EOS"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - EOS_CPlusPlus/**/*
 
 "EOS_CPlusPlus 5.0":
   stage: Execute
@@ -244,26 +224,6 @@ variables:
       changes:
         - RSI/**/*
 
-"OSB_EpicEOS 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .OSB_EpicEOS-4.27.gitlab-ci.yml
-        job: "Generate"
-  variables: 
-    UBT_CLANG_TIDY_EXTENSIONS: "false"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - OSB_EpicEOS/**/*
-
 "OSB_EpicEOS 5.0":
   stage: Execute
   needs:
@@ -283,26 +243,6 @@ variables:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - OSB_EpicEOS/**/*
-
-"OSB_LoginUI 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .OSB_LoginUI-4.27.gitlab-ci.yml
-        job: "Generate"
-  variables: 
-    UBT_CLANG_TIDY_EXTENSIONS: "false"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - OSB_LoginUI/**/*
 
 "OSB_LoginUI 5.0":
   stage: Execute
@@ -324,26 +264,6 @@ variables:
       changes:
         - OSB_LoginUI/**/*
 
-"OSB_Null 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .OSB_Null-4.27.gitlab-ci.yml
-        job: "Generate"
-  variables: 
-    UBT_CLANG_TIDY_EXTENSIONS: "false"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - OSB_Null/**/*
-
 "OSB_Null 5.0":
   stage: Execute
   needs:
@@ -363,27 +283,6 @@ variables:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - OSB_Null/**/*
-
-"OSB_RedpointEOS 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .OSB_RedpointEOS-4.27.gitlab-ci.yml
-        job: "Generate"
-  variables: 
-    UBT_CLANG_TIDY_EXTENSIONS: "false"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "EOS"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - OSB_RedpointEOS/**/*
 
 "OSB_RedpointEOS 5.0":
   stage: Execute
@@ -405,26 +304,6 @@ variables:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - OSB_RedpointEOS/**/*
-
-"OSB_Steam 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .OSB_Steam-4.27.gitlab-ci.yml
-        job: "Generate"
-  variables: 
-    UBT_CLANG_TIDY_EXTENSIONS: "false"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "OSB"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - OSB_Steam/**/*
 
 "OSB_Steam 5.0":
   stage: Execute

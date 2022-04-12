@@ -227,6 +227,9 @@ public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     bool CanLinkToEpicGamesAccount(const UObject *WorldContextObject);
 
+    UFUNCTION(BlueprintCallable)
+    FString UniqueNetIdToString(const FUniqueNetIdRepl &UniqueNetId);
+
 private:
     FDelegateHandle LoginDelegateHandle;
     void HandleLoginComplete(
