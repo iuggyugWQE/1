@@ -1,6 +1,6 @@
-## Matchmaking Blueprints Example for Unreal Engine 4.27
+## Matchmaking Blueprints Example for Unreal Engine 5.0
 
-This is the Matchmaking blueprints example project for Unreal Engine 4.27. It demonstrates how to use the Matchmaking plugin with EOS Online Subsystem entirely from blueprints.
+This is the Matchmaking blueprints example project for Unreal Engine 5.0. It demonstrates how to use the Matchmaking plugin with EOS Online Subsystem entirely from blueprints.
 
 It doesn't require Online Subsystem Blueprints.
 

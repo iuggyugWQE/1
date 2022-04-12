@@ -12,16 +12,13 @@ variables:
   script: |
     git submodule update --init BuildScripts
     if ($LastExitCode -ne 0) { exit $LastExitCode }
-    .\BuildScripts\Lib\Patch_BuildGraph.ps1 -Engine 4.27
     .\BuildScripts\Lib\Patch_BuildGraph.ps1 -Engine 5.0
-    $Distributions = @(
-      "ClangTidy",
-      "MM_SimpleBP",
-      "MM_SimpleCPP"
-    )
     $Distributions_UE5 = @(
+      "ClangTidy",
       "EOS_CPlusPlus",
       "GMF",
+      "MM_SimpleBP",
+      "MM_SimpleCPP",
       "OSB_EpicEOS",
       "OSB_LoginUI",
       "OSB_Null",
@@ -29,10 +26,6 @@ variables:
       "OSB_Steam",
       "RSI"
     )
-    foreach ($Dist in $Distributions) {
-      .\BuildScripts\Generate.ps1 -Engine 4.27 -Distribution "$Dist" -GitLabYamlPath ".$Dist-4.27.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/" -ExecuteTests
-      .\BuildScripts\Generate.ps1 -Engine 5.0 -Distribution "$Dist" -GitLabYamlPath ".$Dist-5.0.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/" -ExecuteTests
-    }
     foreach ($Dist in $Distributions_UE5) {
       .\BuildScripts\Generate.ps1 -Engine 5.0 -Distribution "$Dist" -GitLabYamlPath ".$Dist-5.0.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/" -ExecuteTests
     }
@@ -48,24 +41,6 @@ variables:
   variables:
     GIT_SUBMODULE_STRATEGY: none
 
-"ClangTidy 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .ClangTidy-4.27.gitlab-ci.yml
-        job: "Generate"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "ClangTidy"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - ClangTidy/**/*
-        
 "ClangTidy 5.0":
   stage: Execute
   needs:
@@ -124,26 +99,6 @@ variables:
       changes:
         - GMF/**/*
 
-"MM_SimpleBP 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .MM_SimpleBP-4.27.gitlab-ci.yml
-        job: "Generate"
-  variables: 
-    UBT_CLANG_TIDY_EXTENSIONS: "false"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "MM"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - MM_SimpleBP/**/*
-
 "MM_SimpleBP 5.0":
   stage: Execute
   needs:
@@ -163,26 +118,6 @@ variables:
     - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
       changes:
         - MM_SimpleBP/**/*
-
-"MM_SimpleCPP 4.27":
-  stage: Execute
-  needs:
-    - "Generate"
-  trigger:
-    strategy: depend
-    include:
-      - artifact: .MM_SimpleCPP-4.27.gitlab-ci.yml
-        job: "Generate"
-  variables: 
-    UBT_CLANG_TIDY_EXTENSIONS: "false"
-  rules:
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline" && $TRIGGER_TARGET == "MM"'
-    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
-      changes:
-        - MM_SimpleCPP/**/*
 
 "MM_SimpleCPP 5.0":
   stage: Execute
