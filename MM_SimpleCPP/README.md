@@ -1,6 +1,6 @@
-## Matchmaking C++ Example for Unreal Engine 4.27
+## Matchmaking C++ Example for Unreal Engine 5.0
 
-This is the Matchmaking C++ example project for Unreal Engine 4.27. It demonstrates how to use the Matchmaking plugin with EOS Online Subsystem from C++.
+This is the Matchmaking C++ example project for Unreal Engine 5.0. It demonstrates how to use the Matchmaking plugin with EOS Online Subsystem from C++.
 
 ### Configure EOS
 
