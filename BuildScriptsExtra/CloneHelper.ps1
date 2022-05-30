@@ -9,13 +9,13 @@ function Clone-Repository($ProjectName, $FolderName, $CommitOverridePrefix) {
         Write-Host ("Updating repository in " + $((Get-Location).Path) + "\$FolderName")
         if (!(Test-Path .\$FolderName)) {
             if ($env:CI -eq "true") {
-                git clone --recursive "https://gitlab-ci-token:$env:CI_JOB_TOKEN@gitlab.com/redpointgames/$ProjectName.git" $FolderName
+                git clone --recursive "https://gitlab-ci-token:$env:CI_JOB_TOKEN@src.redpoint.games/redpointgames/$ProjectName.git" $FolderName
                 if ($LastExitCode -ne 0) {
                     Write-Host "git clone failed with exit code $LastExitCode"
                     exit $LastExitCode
                 }
             } else {
-                git clone --recursive "git@gitlab.com:redpointgames/$ProjectName.git" $FolderName
+                git clone --recursive "git@src.redpoint.games:redpointgames/$ProjectName.git" $FolderName
                 if ($LastExitCode -ne 0) {
                     Write-Host "git clone failed with exit code $LastExitCode"
                     exit $LastExitCode
@@ -23,13 +23,13 @@ function Clone-Repository($ProjectName, $FolderName, $CommitOverridePrefix) {
             }
         } else {
             if ($env:CI -eq "true") {
-                git --git-dir=$FolderName/.git --work-tree=$FolderName remote set-url origin "https://gitlab-ci-token:$env:CI_JOB_TOKEN@gitlab.com/redpointgames/$ProjectName.git"
+                git --git-dir=$FolderName/.git --work-tree=$FolderName remote set-url origin "https://gitlab-ci-token:$env:CI_JOB_TOKEN@src.redpoint.games/redpointgames/$ProjectName.git"
                 if ($LastExitCode -ne 0) {
                     Write-Host "git remote set-url origin failed with exit code $LastExitCode"
                     exit $LastExitCode
                 }
             } else {
-                git --git-dir=$FolderName/.git --work-tree=$FolderName remote set-url origin "git@gitlab.com:redpointgames/$ProjectName.git"
+                git --git-dir=$FolderName/.git --work-tree=$FolderName remote set-url origin "git@src.redpoint.games:redpointgames/$ProjectName.git"
                 if ($LastExitCode -ne 0) {
                     Write-Host "git remote set-url origin failed with exit code $LastExitCode"
                     exit $LastExitCode
