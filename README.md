@@ -18,8 +18,8 @@ This repository contains all the example projects for all Redpoint Games plugins
 
 The example projects currently target **Unreal Engine 5.0**. For previous engine versions, refer to the following Git tags:
 
-- [4.27](https://gitlab.com/redpointgames/examples/-/tree/4.27)
-- [4.26](https://gitlab.com/redpointgames/examples/-/tree/15179ddf7783451d09d365ee8e0d1392aef36bb2/Archived)
+- [4.27](https://src.redpoint.games/redpointgames/examples/-/tree/4.27)
+- [4.26](https://src.redpoint.games/redpointgames/examples/-/tree/15179ddf7783451d09d365ee8e0d1392aef36bb2/Archived)
 
 Examples for previous engine versions are no longer being maintained.
 
@@ -27,9 +27,9 @@ Examples for previous engine versions are no longer being maintained.
 
 For more information on the various example projects, please refer to the relevant documentation:
 
-- [Matchmaking](https://redpointgames.gitlab.io/matchmaking/docs/example_project)
-- [EOS Online Subsystem](https://redpointgames.gitlab.io/eos-online-subsystem/docs/example_project)
-- [Online Subsystem Blueprints](https://redpointgames.gitlab.io/online-subsystem-blueprints/docs/example_project)
-- [clang-tidy for Unreal Engine](https://redpointgames.gitlab.io/clang-tidy-for-unreal-engine/docs/)
-- [Game Management Framework](https://redpointgames.gitlab.io/game-management-framework/docs/)
+- [Matchmaking](https://docs.redpoint.games/matchmaking/docs/example_project)
+- [EOS Online Subsystem](https://docs.redpoint.games/eos-online-subsystem/docs/example_project)
+- [Online Subsystem Blueprints](https://docs.redpoint.games/online-subsystem-blueprints/docs/example_project)
+- [clang-tidy for Unreal Engine](https://docs.redpoint.games/clang-tidy-for-unreal-engine/docs/)
+- [Game Management Framework](https://docs.redpoint.games/game-management-framework/docs/)
 - [Replicated Sublevel Instances](https://www.unrealengine.com/marketplace/en-US/product/replicated-sublevel-instances)
