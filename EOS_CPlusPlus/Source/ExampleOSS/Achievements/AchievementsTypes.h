@@ -33,8 +33,8 @@ public:
     FText Description;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    bool bUnlocked;
+    bool bUnlocked = false;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    float Progress;
+    float Progress = 0.0f;
 };

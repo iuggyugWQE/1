@@ -100,9 +100,6 @@ void UExampleCPPSubsystem::OnSessionJoinedViaOverlay(FName SessionName, EOnJoinS
 
 void UExampleCPPSubsystem::StartCreateSession(
     const UObject *WorldContextObject,
-    bool bOverridePorts,
-    int32 InGamePort,
-    int32 InBeaconPort,
     int32 Slots,
     FExampleCPPSubsystemCreateSessionComplete OnDone)
 {
@@ -129,27 +126,10 @@ void UExampleCPPSubsystem::StartCreateSession(
     SessionSettings->Settings.Add(
         FName(TEXT("SessionSetting")),
         FOnlineSessionSetting(FString(TEXT("SettingValue")), EOnlineDataAdvertisementType::ViaOnlineService));
-    bool IsDedicated =
-        FPlatformMisc::GetEnvironmentVariable(TEXT("IS_REDPOINT_DEDICATED_SERVER")) == FString(TEXT("true"));
+    bool IsDedicated = this->GetWorld()->GetNetMode() == NM_DedicatedServer;
     SessionSettings->Settings.Add(
         FName(TEXT("IsDedicatedServer")),
         FOnlineSessionSetting(IsDedicated, EOnlineDataAdvertisementType::ViaOnlineService));
-    if (bOverridePorts)
-    {
-        // Override address bound so client will connect to the map on the actual port.
-        SessionSettings->Settings.Add(
-            FName(TEXT("__EOS_OverrideAddressBound")),
-            FOnlineSessionSetting(
-                FString::Printf(TEXT("0.0.0.0:%d"), InGamePort),
-                EOnlineDataAdvertisementType::ViaOnlineService));
-
-        // This is a custom setting that we handle manually in our beacon code in the example.
-        SessionSettings->Settings.Add(
-            FName(TEXT("OverrideBeaconPort")),
-            FOnlineSessionSetting(
-                FString::Printf(TEXT("%d"), InBeaconPort),
-                EOnlineDataAdvertisementType::ViaOnlineService));
-    }
 
     this->CreateSessionDelegateHandle =
         Session->AddOnCreateSessionCompleteDelegate_Handle(FOnCreateSessionComplete::FDelegate::CreateUObject(
@@ -402,6 +382,118 @@ void UExampleCPPSubsystem::UnregisterPlayer(APlayerController *InPlayerControlle
     check(Session != nullptr);
 
     verify(Session->UnregisterPlayer(FName(TEXT("MyLocalSessionName")), *UniqueNetId));
+}
+
+void UExampleCPPSubsystem::StartStartSession(
+    const UObject *WorldContextObject,
+    FName SessionName,
+    FExampleCPPSubsystemStartSessionComplete OnDone)
+{
+    IOnlineSubsystem *Subsystem = Online::GetSubsystem(WorldContextObject->GetWorld());
+    if (Subsystem == nullptr)
+    {
+        OnDone.ExecuteIfBound(false);
+        return;
+    }
+    IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+
+    // note: This example code only supports running one StartSession process at once; if you want to support
+    // multiple in flight you probably need to make a latent blueprint node.
+    if (this->StartSessionDelegateHandle.IsValid())
+    {
+        OnDone.ExecuteIfBound(false);
+        return;
+    }
+
+    this->StartSessionDelegateHandle =
+        Session->AddOnStartSessionCompleteDelegate_Handle(FOnStartSessionComplete::FDelegate::CreateUObject(
+            this,
+            &UExampleCPPSubsystem::HandleStartSessionComplete,
+            WorldContextObject,
+            OnDone));
+    if (!Session->StartSession(SessionName))
+    {
+        OnDone.ExecuteIfBound(false);
+    }
+}
+
+void UExampleCPPSubsystem::HandleStartSessionComplete(
+    FName SessionName,
+    bool bWasSuccessful,
+    const UObject *WorldContextObject,
+    FExampleCPPSubsystemStartSessionComplete OnDone)
+{
+    OnDone.ExecuteIfBound(bWasSuccessful);
+
+    IOnlineSubsystem *Subsystem = Online::GetSubsystem(WorldContextObject->GetWorld());
+    if (Subsystem == nullptr)
+    {
+        return;
+    }
+    IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+    if (Session == nullptr)
+    {
+        return;
+    }
+
+    Session->ClearOnStartSessionCompleteDelegate_Handle(this->StartSessionDelegateHandle);
+    this->StartSessionDelegateHandle.Reset();
+}
+
+void UExampleCPPSubsystem::StartEndSession(
+    const UObject *WorldContextObject,
+    FName SessionName,
+    FExampleCPPSubsystemEndSessionComplete OnDone)
+{
+    IOnlineSubsystem *Subsystem = Online::GetSubsystem(WorldContextObject->GetWorld());
+    if (Subsystem == nullptr)
+    {
+        OnDone.ExecuteIfBound(false);
+        return;
+    }
+    IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+
+    // note: This example code only supports running one EndSession process at once; if you want to support
+    // multiple in flight you probably need to make a latent blueprint node.
+    if (this->EndSessionDelegateHandle.IsValid())
+    {
+        OnDone.ExecuteIfBound(false);
+        return;
+    }
+
+    this->EndSessionDelegateHandle =
+        Session->AddOnEndSessionCompleteDelegate_Handle(FOnEndSessionComplete::FDelegate::CreateUObject(
+            this,
+            &UExampleCPPSubsystem::HandleEndSessionComplete,
+            WorldContextObject,
+            OnDone));
+    if (!Session->EndSession(SessionName))
+    {
+        OnDone.ExecuteIfBound(false);
+    }
+}
+
+void UExampleCPPSubsystem::HandleEndSessionComplete(
+    FName SessionName,
+    bool bWasSuccessful,
+    const UObject *WorldContextObject,
+    FExampleCPPSubsystemEndSessionComplete OnDone)
+{
+    OnDone.ExecuteIfBound(bWasSuccessful);
+
+    IOnlineSubsystem *Subsystem = Online::GetSubsystem(WorldContextObject->GetWorld());
+    if (Subsystem == nullptr)
+    {
+        return;
+    }
+    IOnlineSessionPtr Session = Subsystem->GetSessionInterface();
+    if (Session == nullptr)
+    {
+        return;
+    }
+
+    Session->ClearOnEndSessionCompleteDelegate_Handle(this->EndSessionDelegateHandle);
+    this->EndSessionDelegateHandle.Reset();
 }
 
 void UExampleCPPSubsystem::StartDestroySession(
