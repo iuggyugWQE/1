@@ -27,5 +27,5 @@ public:
     FString Id;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    int CurrentValue;
+    int CurrentValue = 0;
 };

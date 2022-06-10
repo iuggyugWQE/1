@@ -24,7 +24,7 @@ struct EXAMPLEOSS_API FExampleCPPLeaderboardEntry
 
 public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    int Rank;
+    int Rank = 0;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     FString PlayerId;
@@ -33,5 +33,5 @@ public:
     FString PlayerNickname;
 
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-    int Score;
+    int Score = 0;
 };

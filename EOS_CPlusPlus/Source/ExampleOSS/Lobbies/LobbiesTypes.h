@@ -26,7 +26,7 @@ public:
     FUniqueNetIdRepl UserId;
 
     UPROPERTY(BlueprintReadOnly, Category = "Lobbies")
-    class UExampleCPPLobby *Lobby;
+    class UExampleCPPLobby *Lobby = nullptr;
 };
 
 USTRUCT(BlueprintType)

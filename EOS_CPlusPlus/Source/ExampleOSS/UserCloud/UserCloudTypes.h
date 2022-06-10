@@ -22,13 +22,13 @@ struct EXAMPLEOSS_API FCloudFileDataCPP
     FString FileName;
 
     UPROPERTY(BlueprintReadOnly, Category = "User Cloud")
-    int32 FileSize;
+    int32 FileSize = 0;
 
     UPROPERTY(BlueprintReadOnly, Category = "User Cloud")
     FString URL;
 
     UPROPERTY(BlueprintReadOnly, Category = "User Cloud")
-    int64 ChunkID;
+    int64 ChunkID = 0;
 
     static FCloudFileDataCPP FromNative(const struct FCloudFileHeader &FileHeader);
 };

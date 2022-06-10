@@ -77,6 +77,8 @@ DECLARE_DYNAMIC_DELEGATE_TwoParams(
     const TArray<UExampleCPPSessionSearchResult *> &,
     Results);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemCreateSessionComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemStartSessionComplete, bool, WasSuccessful);
+DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemEndSessionComplete, bool, WasSuccessful);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemDestroySessionComplete, bool, WasSuccessful);
 DECLARE_DYNAMIC_DELEGATE_OneParam(FExampleCPPSubsystemJoinSessionComplete, bool, WasSuccessful);
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FExampleCPPSubsystemPartyLeaderWasFollowedToSession, FName, SessionName);
@@ -764,9 +766,6 @@ public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
     void StartCreateSession(
         const UObject *WorldContextObject,
-        bool bOverridePorts,
-        int32 InGamePort,
-        int32 InBeaconPort,
         int32 Slots,
         FExampleCPPSubsystemCreateSessionComplete OnDone);
 
@@ -792,6 +791,36 @@ private:
         const UObject *WorldContextObject,
         FExampleCPPSubsystemFindSessionsComplete OnDone,
         TSharedRef<FOnlineSessionSearch> Search);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartStartSession(
+        const UObject *WorldContextObject,
+        FName SessionName,
+        FExampleCPPSubsystemStartSessionComplete OnDone);
+
+private:
+    FDelegateHandle StartSessionDelegateHandle;
+    void HandleStartSessionComplete(
+        FName SessionName,
+        bool bWasSuccessful,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemStartSessionComplete OnDone);
+
+public:
+    UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))
+    void StartEndSession(
+        const UObject *WorldContextObject,
+        FName SessionName,
+        FExampleCPPSubsystemEndSessionComplete OnDone);
+
+private:
+    FDelegateHandle EndSessionDelegateHandle;
+    void HandleEndSessionComplete(
+        FName SessionName,
+        bool bWasSuccessful,
+        const UObject *WorldContextObject,
+        FExampleCPPSubsystemEndSessionComplete OnDone);
 
 public:
     UFUNCTION(BlueprintCallable, meta = (WorldContext = "WorldContextObject"))

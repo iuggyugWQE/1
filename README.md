@@ -4,7 +4,7 @@ This repository contains all the example projects for all Redpoint Games plugins
 
 - C++ example projects:
   - [Matchmaking](./MM_SimpleCPP/)
-  - [Redpoint's EOS Online Subsystem](./EOS_CPlusPlus/) and the related [Agones example documentation](./EOS_AgonesResources/)
+  - [Redpoint's EOS Online Subsystem](./EOS_CPlusPlus/)
   - [clang-tidy for Unreal Engine](./ClangTidy/)
 - Blueprint example projects:
   - [Matchmaking](./MM_SimpleBP/)
@@ -21,7 +21,7 @@ The example projects currently target **Unreal Engine 5.0**. For previous engine
 - [4.27](https://src.redpoint.games/redpointgames/examples/-/tree/4.27)
 - [4.26](https://src.redpoint.games/redpointgames/examples/-/tree/15179ddf7783451d09d365ee8e0d1392aef36bb2/Archived)
 
-Examples for previous engine versions are no longer being maintained.
+Examples for previous engine versions are no longer being maintained. The Agones documentation that was previously in this repository has been removed, as it is superseded by [the dedicated server documentation](https://docs.redpoint.games/eos-online-subsystem/docs/dedis_overview).
 
 ## Further documentation
 
