@@ -38,11 +38,14 @@ void UExampleCPPSubsystem::PostInitProperties()
             Party->AddOnPartyDataReceivedDelegate_Handle(
                 FOnPartyDataReceivedDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnPartyDataReceived));
         }
-        Session->AddOnSessionUserInviteAcceptedDelegate_Handle(FOnSessionUserInviteAcceptedDelegate::CreateUObject(
-            this,
-            &UExampleCPPSubsystem::OnSessionUserInviteAccepted));
-        Session->AddOnJoinSessionCompleteDelegate_Handle(
-            FOnJoinSessionCompleteDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnSessionJoinedViaOverlay));
+        if (Session.IsValid())
+        {
+            Session->AddOnSessionUserInviteAcceptedDelegate_Handle(FOnSessionUserInviteAcceptedDelegate::CreateUObject(
+                this,
+                &UExampleCPPSubsystem::OnSessionUserInviteAccepted));
+            Session->AddOnJoinSessionCompleteDelegate_Handle(
+                FOnJoinSessionCompleteDelegate::CreateUObject(this, &UExampleCPPSubsystem::OnSessionJoinedViaOverlay));
+        }
         if (Presence.IsValid())
         {
             Presence->AddOnPresenceReceivedDelegate_Handle(
