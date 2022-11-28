@@ -12,7 +12,6 @@ variables:
   script: |
     git submodule update --init BuildScripts
     if ($LastExitCode -ne 0) { exit $LastExitCode }
-    .\BuildScripts\Lib\Patch_BuildGraph.ps1 -Engine 5.0
     $Distributions_UE5 = @(
       "ClangTidy",
       "EOS_CPlusPlus",
@@ -27,7 +26,7 @@ variables:
       "RSI"
     )
     foreach ($Dist in $Distributions_UE5) {
-      .\BuildScripts\Generate.ps1 -Engine 5.0 -Distribution "$Dist" -GitLabYamlPath ".$Dist-5.0.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "X:\" -MapDriveForShorterPaths -MacSharedStorageAbsolutePath "/Volumes/BuildArtifacts/" -ExecuteTests
+      .\BuildScripts\Generate.ps1 -Engine "uefs:registry.redpoint.games/redpointgames/infrastructure/unreal-engine-epic:5.1" -Distribution "$Dist" -GitLabYamlPath ".$Dist.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "$env:SHARED_STORAGE_WINDOWS_PATH" -MacSharedStorageAbsolutePath "$SHARED_STORAGE_MAC_PATH" -ExecuteTests
     }
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
@@ -41,14 +40,14 @@ variables:
   variables:
     GIT_SUBMODULE_STRATEGY: none
 
-"ClangTidy 5.0":
+"ClangTidy":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .ClangTidy-5.0.gitlab-ci.yml
+      - artifact: .ClangTidy.gitlab-ci.yml
         job: "Generate"
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
@@ -59,14 +58,14 @@ variables:
       changes:
         - ClangTidy/**/*
 
-"EOS_CPlusPlus 5.0":
+"EOS_CPlusPlus":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .EOS_CPlusPlus-5.0.gitlab-ci.yml
+      - artifact: .EOS_CPlusPlus.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"
@@ -79,14 +78,14 @@ variables:
       changes:
         - EOS_CPlusPlus/**/*
 
-"GMF 5.0":
+"GMF":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .GMF-5.0.gitlab-ci.yml
+      - artifact: .GMF.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"
@@ -99,14 +98,14 @@ variables:
       changes:
         - GMF/**/*
 
-"MM_SimpleBP 5.0":
+"MM_SimpleBP":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .MM_SimpleBP-5.0.gitlab-ci.yml
+      - artifact: .MM_SimpleBP.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"
@@ -119,14 +118,14 @@ variables:
       changes:
         - MM_SimpleBP/**/*
 
-"MM_SimpleCPP 5.0":
+"MM_SimpleCPP":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .MM_SimpleCPP-5.0.gitlab-ci.yml
+      - artifact: .MM_SimpleCPP.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"
@@ -139,14 +138,14 @@ variables:
       changes:
         - MM_SimpleCPP/**/*
 
-"RSI 5.0":
+"RSI":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .RSI-5.0.gitlab-ci.yml
+      - artifact: .RSI.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"
@@ -159,14 +158,14 @@ variables:
       changes:
         - RSI/**/*
 
-"OSB_EpicEOS 5.0":
+"OSB_EpicEOS":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .OSB_EpicEOS-5.0.gitlab-ci.yml
+      - artifact: .OSB_EpicEOS.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"
@@ -179,14 +178,14 @@ variables:
       changes:
         - OSB_EpicEOS/**/*
 
-"OSB_LoginUI 5.0":
+"OSB_LoginUI":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .OSB_LoginUI-5.0.gitlab-ci.yml
+      - artifact: .OSB_LoginUI.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"
@@ -199,14 +198,14 @@ variables:
       changes:
         - OSB_LoginUI/**/*
 
-"OSB_Null 5.0":
+"OSB_Null":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .OSB_Null-5.0.gitlab-ci.yml
+      - artifact: .OSB_Null.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"
@@ -219,14 +218,14 @@ variables:
       changes:
         - OSB_Null/**/*
 
-"OSB_RedpointEOS 5.0":
+"OSB_RedpointEOS":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .OSB_RedpointEOS-5.0.gitlab-ci.yml
+      - artifact: .OSB_RedpointEOS.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"
@@ -240,14 +239,14 @@ variables:
       changes:
         - OSB_RedpointEOS/**/*
 
-"OSB_Steam 5.0":
+"OSB_Steam":
   stage: Execute
   needs:
     - "Generate"
   trigger:
     strategy: depend
     include:
-      - artifact: .OSB_Steam-5.0.gitlab-ci.yml
+      - artifact: .OSB_Steam.gitlab-ci.yml
         job: "Generate"
   variables: 
     UBT_CLANG_TIDY_EXTENSIONS: "false"

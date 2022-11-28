@@ -12,8 +12,8 @@ Got questions about Replicated Sublevel Instances? [Ask us any question you have
 
 ## Gallery
 
-![A screenshot of the RSI demo running in the Unreal Engine 4 editor](./Gallery_1.png)
+![A screenshot of the RSI demo running in the Unreal Engine editor](./Gallery_1.png)
 
 ## License
 
-This example project is available under an MIT license, so you can use parts of this example in your games. This license **does not** extend to Replicated Sublevel Instances itself, which is licensed to you when you purchase it from the Unreal Engine 4 Marketplace, under the UE4 Marketplace EULA.
+This example project is available under an MIT license, so you can use parts of this example in your games. This license **does not** extend to Replicated Sublevel Instances itself, which is licensed to you when you purchase it from the Unreal Engine Marketplace, under the Marketplace EULA.
