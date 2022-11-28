@@ -10,6 +10,9 @@ public class ExampleOSSServerTarget : TargetRules
         Type = TargetType.Server;
         DefaultBuildSettings = BuildSettingsVersion.V2;
         ExtraModuleNames.AddRange(new string[] { "ExampleOSS", "ExampleOSSEarlyConfig" });
+#if UE_5_1_OR_LATER
+        IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
+#endif
 
         if (Target.Configuration != UnrealTargetConfiguration.Shipping)
         {

@@ -1,6 +1,6 @@
-## EOS Online Subsystem C++ Example for Unreal Engine 5.0
+## EOS Online Subsystem C++ Example for Unreal Engine 5.1
 
-This is the C++ example project for Unreal Engine 5.0. It demonstrates how to use [the EOS Online Subsystem plugin](https://redpointgames.gitlab.io/eos-online-subsystem/) in your Unreal Engine project.
+This is the C++ example project for Unreal Engine 5.1. It demonstrates how to use [the EOS Online Subsystem plugin](https://redpointgames.gitlab.io/eos-online-subsystem/) in your Unreal Engine project.
 
 ### Getting started
 
