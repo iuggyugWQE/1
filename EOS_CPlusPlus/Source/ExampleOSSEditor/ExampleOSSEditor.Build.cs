@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class ExampleOSSDeveloper : ModuleRules
+public class ExampleOSSEditor : ModuleRules
 {
-    public ExampleOSSDeveloper(ReadOnlyTargetRules Target) : base(Target)
+    public ExampleOSSEditor(ReadOnlyTargetRules Target) : base(Target)
     {
         PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
@@ -26,9 +26,11 @@ public class ExampleOSSDeveloper : ModuleRules
             "Http",
 #endif
             "Json", 
-            "Gauntlet",
-            "AutomationController", 
+            "AssetRegistry", 
             "OnlineSubsystemRedpointEOS",
+            "BlueprintGraph",
+            "UnrealEd",
+            "SourceControl",
         });
     }
 }

@@ -2,7 +2,11 @@
 
 #include "EOSGauntletRunAutomationTestsTestController.h"
 
+#if defined(UE_5_1_OR_LATER)
+#include "AssetRegistry/AssetRegistryModule.h"
+#else
 #include "AssetRegistryModule.h"
+#endif
 #include "EOSGauntletTestLog.h"
 #include "IAutomationControllerModule.h"
 #include "Misc/App.h"

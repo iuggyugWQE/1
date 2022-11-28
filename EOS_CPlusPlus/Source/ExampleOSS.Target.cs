@@ -10,6 +10,9 @@ public class ExampleOSSTarget : TargetRules
         Type = TargetType.Game;
         DefaultBuildSettings = BuildSettingsVersion.V2;
         ExtraModuleNames.AddRange(new string[] { "ExampleOSS", "ExampleOSSEarlyConfig" });
+#if UE_5_1_OR_LATER
+        IncludeOrderVersion = EngineIncludeOrderVersion.Latest;
+#endif
 
         if (Target.Configuration != UnrealTargetConfiguration.Shipping)
         {
@@ -17,5 +20,6 @@ public class ExampleOSSTarget : TargetRules
         }
 
         ProjectDefinitions.Add("ONLINE_SUBSYSTEM_EOS_ENABLE_STEAM=1");
+        ProjectDefinitions.Add("ONLINE_SUBSYSTEM_EOS_ENABLE_DISCORD=1");
     }
 }
