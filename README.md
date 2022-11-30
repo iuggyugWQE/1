@@ -16,8 +16,9 @@ This repository contains all the example projects for all Redpoint Games plugins
   - [Game Management Framework](./GMF/)
   - [Replicated Sublevel Instances](./RSI/)
 
-The example projects currently target **Unreal Engine 5.0**. For previous engine versions, refer to the following Git tags:
+The example projects currently target **Unreal Engine 5.1**. For previous engine versions, refer to the following Git tags:
 
+- [5.0](https://src.redpoint.games/redpointgames/examples/-/tree/5.0)
 - [4.27](https://src.redpoint.games/redpointgames/examples/-/tree/4.27)
 - [4.26](https://src.redpoint.games/redpointgames/examples/-/tree/15179ddf7783451d09d365ee8e0d1392aef36bb2/Archived)
 
