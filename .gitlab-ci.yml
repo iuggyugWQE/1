@@ -86,10 +86,10 @@ variables:
   script: |
     echo "Bundling the examples into a release..."
   release:
-    name: 'Example Projects at $CI_COMMIT_SHORT_SHA'
+    name: 'Example Projects at $CI_COMMIT_TIMESTAMP'
     tag_name: 'snapshot-$CI_COMMIT_SHORT_SHA'
     description: |
-      This is an automated release that provides ZIP downloads for all the examples in the repository, so you don't have to use `git clone` to get a copy of the example you are interested in.
+      This is an automated release that provides ZIP downloads for all the examples in the repository, so you don't have to use "git clone" to get a copy of the example you are interested in. This snapshot was taken at $CI_COMMIT_TIMESTAMP.
     ref: '$CI_COMMIT_SHA'
     assets:
       links:
