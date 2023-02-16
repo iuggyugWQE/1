@@ -1,8 +1,8 @@
 stages:
-  - Package
-  - Release
   - Generate
   - Execute
+  - Package
+  - Release
 
 variables:
   GIT_CLEAN_FLAGS: none
@@ -27,6 +27,7 @@ variables:
           - OSB_Steam
           - RSI
   script: |
+    # Compress
     Push-Location $env:ZIP_FOLDER
     git clean -xdff
     if ($LastExitCode -ne 0) {
@@ -41,41 +42,24 @@ variables:
       New-Item -ItemType Directory -Path Zips
     }
     Compress-Archive -Path $env:ZIP_FOLDER -Destination "Zips/$env:ZIP_FOLDER.zip" -Force
-  artifacts:
-    paths:
-      - Zips/*.zip
-  rules:
-    - if: $CI_COMMIT_TAG
-      when: never
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
-    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline"'
-    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
-"Upload Examples":
-  stage: Release
-  needs:
-    - "Zip Examples"
-  tags:
-    - redpoint-games-windows
-  parallel:
-    matrix:
-      - ZIP_FOLDER:
-          - ClangTidy
-          - EOS_CPlusPlus
-          - GMF
-          - MM_SimpleBP
-          - MM_SimpleCPP
-          - OSB_EpicEOS
-          - OSB_LoginUI
-          - OSB_Null
-          - OSB_RedpointEOS
-          - OSB_Steam
-          - RSI
-  script: |
-    $env:EXAMPLES_NAME = "example-zips/$env:CI_COMMIT_SHA"
-    .\BuildScripts\Lib\Deploy_UploadToBackblazeB2.ps1 -ZipPath "Zips\$ZIP_FOLDER.zip" -BucketName dl-redpoint-games -FolderEnvVar EXAMPLES_NAME
+    # Upload
+    $env:B2_ACCOUNT_INFO = Join-Path -Path (Resolve-Path -Path ".") -ChildPath ".b2.db"
+    try {
+      b2 authorize-account "$env:DL_BACKBLAZE_B2_KEY_ID" "$env:DL_BACKBLAZE_B2_APPLICATION_KEY"
+      if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+      }
+      b2 upload-file dl-redpoint-games "Zips/$ZIP_FOLDER.zip" "example-zips/$CI_COMMIT_SHA/$ZIP_FOLDER.zip"
+      if ($LASTEXITCODE -ne 0) {
+        exit $LASTEXITCODE
+      }
+    } finally {
+      if (Test-Path $env:B2_ACCOUNT_INFO) {
+        Write-Output "Cleaning up B2 authentication file..."
+        Remove-Item -Force -Path $env:B2_ACCOUNT_INFO
+      }
+    }
   rules:
     - if: $CI_COMMIT_TAG
       when: never
@@ -87,7 +71,8 @@ variables:
 "Release Examples":
   stage: Release
   needs:
-    - "Upload Examples"
+    - job: "Zip Examples"
+      artifacts: false
   image: registry.gitlab.com/gitlab-org/release-cli:latest
   tags:
     - redpoint-games-docker
