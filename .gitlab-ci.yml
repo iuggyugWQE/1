@@ -1,12 +1,132 @@
 stages:
+  - Package
+  - Release
   - Generate
   - Execute
 
 variables:
   GIT_CLEAN_FLAGS: none
 
+"Zip Examples":
+  stage: Package
+  needs: []
+  tags:
+    - redpoint-games-windows
+  parallel:
+    matrix:
+      - ZIP_FOLDER:
+          - ClangTidy
+          - EOS_CPlusPlus
+          - GMF
+          - MM_SimpleBP
+          - MM_SimpleCPP
+          - OSB_EpicEOS
+          - OSB_LoginUI
+          - OSB_Null
+          - OSB_RedpointEOS
+          - OSB_Steam
+          - RSI
+  script: |
+    Push-Location $env:ZIP_FOLDER
+    git clean -xdff
+    if ($LastExitCode -ne 0) {
+      exit $LastExitCode
+    }
+    git reset --hard HEAD
+    if ($LastExitCode -ne 0) {
+      exit $LastExitCode
+    }
+    Pop-Location
+    if (!(Test-Path Zips)) {
+      New-Item -ItemType Directory -Path Zips
+    }
+    Compress-Archive -Path $env:ZIP_FOLDER -Destination "Zips/$env:ZIP_FOLDER.zip" -Force
+  artifacts:
+    paths:
+      - Zips/*.zip
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline"'
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+"Upload Examples":
+  stage: Release
+  needs:
+    - "Zip Examples"
+  tags:
+    - redpoint-games-linux
+  parallel:
+    matrix:
+      - ZIP_FOLDER:
+          - ClangTidy
+          - EOS_CPlusPlus
+          - GMF
+          - MM_SimpleBP
+          - MM_SimpleCPP
+          - OSB_EpicEOS
+          - OSB_LoginUI
+          - OSB_Null
+          - OSB_RedpointEOS
+          - OSB_Steam
+          - RSI
+  script: |
+    b2 upload_file dl-redpoint-games "Zips/$ZIP_FOLDER.zip" "example-zips/$CI_COMMIT_SHA/$ZIP_FOLDER.zip"
+  rules:
+    - if: $CI_COMMIT_TAG
+      
+"Release Examples":
+  stage: Release
+  needs:
+    - "Upload Examples"
+  image: registry.gitlab.com/gitlab-org/release-cli:latest
+  tags:
+    - redpoint-games-docker
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline"'
+  script: |
+    echo "Bundling the examples into a release..."
+  release:
+    tag_name: 'snapshot-$CI_COMMIT_SHORT_SHA'
+    description: |
+      This is an automated release that provides ZIP downloads for all the examples in the repository, so you don't have to use `git clone` to get a copy of the example you are interested in.
+    ref: '$CI_COMMIT_SHA'
+    assets:
+      links:
+        - name: 'Clang Tidy'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=ClangTidy'
+        - name: 'EOS Online Subsystem (C++)'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=EOS_CPlusPlus'
+        - name: 'Matchmaking (C++)'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=MM_SimpleCPP'
+        - name: 'Matchmaking (Blueprints)'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=MM_SimpleBP'
+        - name: 'Online Subsystem Blueprints (Redpoint EOS)'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_RedpointEOS'
+        - name: 'Online Subsystem Blueprints (Epic EOS)'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_EpicEOS'
+        - name: 'Online Subsystem Blueprints (Steam)'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_Steam'
+        - name: 'Online Subsystem Blueprints (Null)'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_Null'
+        - name: 'Online Subsystem Blueprints (for external login UIs)'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_LoginUI'
+        - name: 'Game Management Framework'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=GMF'
+        - name: 'Replicated Sublevel Instances'
+          url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=RSI'
+
 "Generate":
   stage: Generate
+  needs: []
   tags:
     - redpoint-games-windows
   script: |
