@@ -86,6 +86,7 @@ variables:
   script: |
     echo "Bundling the examples into a release..."
   release:
+    name: 'Example Projects at $CI_COMMIT_SHORT_SHA'
     tag_name: 'snapshot-$CI_COMMIT_SHORT_SHA'
     description: |
       This is an automated release that provides ZIP downloads for all the examples in the repository, so you don't have to use `git clone` to get a copy of the example you are interested in.
@@ -94,26 +95,37 @@ variables:
       links:
         - name: 'Clang Tidy'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=ClangTidy'
+          link_type: 'package'
         - name: 'EOS Online Subsystem (C++)'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=EOS_CPlusPlus'
+          link_type: 'package'
         - name: 'Matchmaking (C++)'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=MM_SimpleCPP'
+          link_type: 'package'
         - name: 'Matchmaking (Blueprints)'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=MM_SimpleBP'
+          link_type: 'package'
         - name: 'Online Subsystem Blueprints (Redpoint EOS)'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_RedpointEOS'
+          link_type: 'package'
         - name: 'Online Subsystem Blueprints (Epic EOS)'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_EpicEOS'
+          link_type: 'package'
         - name: 'Online Subsystem Blueprints (Steam)'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_Steam'
+          link_type: 'package'
         - name: 'Online Subsystem Blueprints (Null)'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_Null'
+          link_type: 'package'
         - name: 'Online Subsystem Blueprints (for external login UIs)'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=OSB_LoginUI'
+          link_type: 'package'
         - name: 'Game Management Framework'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=GMF'
+          link_type: 'package'
         - name: 'Replicated Sublevel Instances'
           url: 'https://licensing.redpoint.games/example-download?sha=$CI_COMMIT_SHA&zip=RSI'
+          link_type: 'package'
 
 "Generate":
   stage: Generate
