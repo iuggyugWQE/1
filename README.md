@@ -24,6 +24,18 @@ The example projects currently target **Unreal Engine 5.1**. For previous engine
 
 Examples for previous engine versions are no longer being maintained. The Agones documentation that was previously in this repository has been removed, as it is superseded by [the dedicated server documentation](https://docs.redpoint.games/eos-online-subsystem/docs/dedis_overview).
 
+## Downloading the examples
+
+There are two ways to download the example projects, either by downloading the ZIPs or by using `git clone`.
+
+You can [download ZIPs of the example projects from the release page](https://src.redpoint.games/redpointgames/examples/-/releases).
+
+Alternatively, to clone this repository with Git, use:
+
+```
+git clone --recursive https://src.redpoint.games/redpointgames/examples
+```
+
 ## Further documentation
 
 For more information on the various example projects, please refer to the relevant documentation:
