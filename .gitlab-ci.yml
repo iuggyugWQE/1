@@ -58,7 +58,7 @@ variables:
   needs:
     - "Zip Examples"
   tags:
-    - redpoint-games-linux
+    - redpoint-games-windows
   parallel:
     matrix:
       - ZIP_FOLDER:
@@ -74,9 +74,15 @@ variables:
           - OSB_Steam
           - RSI
   script: |
-    b2 upload_file dl-redpoint-games "Zips/$ZIP_FOLDER.zip" "example-zips/$CI_COMMIT_SHA/$ZIP_FOLDER.zip"
+    $env:EXAMPLES_NAME = "example-zips/$env:CI_COMMIT_SHA"
+    .\BuildScripts\Lib\Deploy_UploadToBackblazeB2.ps1 -ZipPath "Zips\$ZIP_FOLDER.zip" -BucketName dl-redpoint-games -FolderEnvVar EXAMPLES_NAME
   rules:
     - if: $CI_COMMIT_TAG
+      when: never
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "web"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "schedule"'
+    - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "pipeline"'
       
 "Release Examples":
   stage: Release
