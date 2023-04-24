@@ -5,7 +5,9 @@
 #include "Containers/Ticker.h"
 #include "EOSGauntletTestLog.h"
 #include "GameFramework/GameModeBase.h"
+#include "Interfaces/OnlineSessionInterface.h"
 #include "Misc/Parse.h"
+#include "OnlineSessionSettings.h"
 #include "OnlineSubsystemUtils.h"
 
 void UEOSGauntletConnectToSessionTestController::OnLoginComplete(
