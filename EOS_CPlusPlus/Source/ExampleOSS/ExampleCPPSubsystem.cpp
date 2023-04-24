@@ -23,6 +23,12 @@ void UExampleCPPSubsystem::PostInitProperties()
 
     check(this->GetWorld() != nullptr);
 
+    if (GetDefault<UExampleCPPConfig>()->bPreferBlueprintsImplementation)
+    {
+        // Do not wire up C++ events if the blueprint implementation is preferred.
+        return;
+    }
+
     IOnlineSubsystem *Subsystem = Online::GetSubsystem(this->GetWorld());
     if (Subsystem != nullptr && Subsystem->GetSubsystemName() == FName(TEXT("RedpointEOS")))
     {
