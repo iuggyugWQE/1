@@ -16,11 +16,10 @@ This repository contains all the example projects for all Redpoint Games plugins
   - [Game Management Framework](./GMF/)
   - [Replicated Sublevel Instances](./RSI/)
 
-The example projects currently target **Unreal Engine 5.1**. For previous engine versions, refer to the following Git tags:
+The example projects currently target **Unreal Engine 5.2**. For previous engine versions, refer to the following Git tags:
 
+- [5.1](https://src.redpoint.games/redpointgames/examples/-/tree/5.1)
 - [5.0](https://src.redpoint.games/redpointgames/examples/-/tree/5.0)
-- [4.27](https://src.redpoint.games/redpointgames/examples/-/tree/4.27)
-- [4.26](https://src.redpoint.games/redpointgames/examples/-/tree/15179ddf7783451d09d365ee8e0d1392aef36bb2/Archived)
 
 Examples for previous engine versions are no longer being maintained. The Agones documentation that was previously in this repository has been removed, as it is superseded by [the dedicated server documentation](https://docs.redpoint.games/eos-online-subsystem/docs/dedis_overview).
 
