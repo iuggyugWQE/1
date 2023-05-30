@@ -149,7 +149,7 @@ variables:
       "RSI"
     )
     foreach ($Dist in $Distributions_UE5) {
-      .\BuildScripts\Generate.ps1 -Engine "uefs:registry.redpoint.games/redpointgames/infrastructure/unreal-engine-epic:5.1" -Distribution "$Dist" -GitLabYamlPath ".$Dist.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "$env:SHARED_STORAGE_WINDOWS_PATH" -MacSharedStorageAbsolutePath "$SHARED_STORAGE_MAC_PATH" -ExecuteTests
+      .\BuildScripts\Generate.ps1 -Engine "uefs:registry.redpoint.games/redpointgames/infrastructure/unreal-engine-epic:5.2" -Distribution "$Dist" -GitLabYamlPath ".$Dist.gitlab-ci.yml" -GitLabAgentTagPrefix redpoint-games -WindowsSharedStorageAbsolutePath "$env:SHARED_STORAGE_WINDOWS_PATH" -MacSharedStorageAbsolutePath "$SHARED_STORAGE_MAC_PATH" -ExecuteTests
     }
   rules:
     - if: '$CI_COMMIT_BRANCH == "main" && $CI_PIPELINE_SOURCE == "push"'
