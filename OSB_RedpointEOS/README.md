@@ -1,6 +1,6 @@
-## EOS Online Subsystem Blueprints Example for Unreal Engine 5.1
+## EOS Online Subsystem Blueprints Example for Unreal Engine 5.2
 
-This is the blueprints example project for Unreal Engine 5.1. It demonstrates how to use [the EOS Online Subsystem plugin](https://redpointgames.gitlab.io/eos-online-subsystem/) and [the Online Subsystem Blueprints plugin](https://redpointgames.gitlab.io/online-subsystem-blueprints/) in your Unreal Engine project.
+This is the blueprints example project for Unreal Engine 5.2. It demonstrates how to use [the EOS Online Subsystem plugin](https://redpointgames.gitlab.io/eos-online-subsystem/) and [the Online Subsystem Blueprints plugin](https://redpointgames.gitlab.io/online-subsystem-blueprints/) in your Unreal Engine project.
 
 Although this example comes preconfigured for EOS, you can use it with any online subsystem if you're just looking for a standalone example of Online Subsystem Blueprints. Just skip the steps pertaining to EOS setup and configuration, and switch the `DefaultPlatformService=RedpointEOS` value in `DefaultEngine.ini` to your preferred online subsystem.
 
